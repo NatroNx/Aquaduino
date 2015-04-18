@@ -766,10 +766,9 @@ readScreenScreen();
        else if (((x>=ResetCord[0]) && (x<=ResetCord[2]))  && ((y>=ResetCord[1]) && (y<=ResetCord[3]))) // homebutton
         { waitForIt(ResetCord[0], ResetCord[1], ResetCord[2], ResetCord[3]);
           manualOverride=0;
-          updatePowerIcons();
-          processRelais();
           dispScreen=0;
           drawScreen();
+          processRelais();          
           lightCalculator();
           AI();
         
