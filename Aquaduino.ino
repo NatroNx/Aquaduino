@@ -1,3 +1,5 @@
+//Aquaduino
+// v.1.1  - 21.08.15
 
 //needed Libraries 
 #include <SdFat.h>
@@ -580,7 +582,7 @@ readScreenScreen();
  myGLCD.setFont(BigFont);
   myGLCD.setBackColor(0, 0, 0);
  drawScreen(); 
- 
+ processPump();
  
  Aquaduino = SD.open("aqua.txt", FILE_WRITE);
  if (Aquaduino)
@@ -641,10 +643,13 @@ readScreenScreen();
         {waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
         cleaningInProcess=false;
         manualOverride=false;
+        pump1Value=false;
+        pump2Value=false;
         printDate(now, 5,5);
         lightCalculator();
         drawScreen();
         AI();
+        processPump();
         }
         else if (((x>=LightUp[0]) && (x<=LightUp[2]))  && ((y>=LightUp[1]) && (y<=LightUp[3]))) // pwmUp
         {//waitForIt(LightUp[0], LightUp[1], LightUp[2], LightUp[3]);
@@ -761,16 +766,20 @@ readScreenScreen();
           coolValue=true;
           updatePowerIcons();
           processRelais();
+          processPump();
         
         }
        else if (((x>=ResetCord[0]) && (x<=ResetCord[2]))  && ((y>=ResetCord[1]) && (y<=ResetCord[3]))) // homebutton
         { waitForIt(ResetCord[0], ResetCord[1], ResetCord[2], ResetCord[3]);
           manualOverride=0;
+          pump1Value=false;
+          pump2Value=false;
           dispScreen=0;
           drawScreen();
-          processRelais();          
+          //processRelais();          
           lightCalculator();
           AI();
+          processPump();
         
         }
    

@@ -24,8 +24,7 @@ f23on //Coolpump ON
 */
 //erst funken
 //dann schalten 
-//sx1509.writePin(pump1Pin, pump1Value);
-// sx1509.writePin(pump2Pin, pump2Value);
+
 
 
 
@@ -38,11 +37,6 @@ f23on //Coolpump ON
  sx1509.writePin(light1Pin, light1Value);
  sx1509.writePin(light2Pin, light2Value);
  
- 
- if (!pump1Value){mySwitch.send(f11on, 24);}
- else {mySwitch.send(f11off, 24);}
- if (!pump2Value){mySwitch.send(f24on, 24);}
- else {mySwitch.send(f24off, 24);}
 
   if (!heaterValue){mySwitch.send(f21on, 24);}
  else {mySwitch.send(f21off, 24);}
@@ -60,6 +54,13 @@ f23on //Coolpump ON
 
 // sx1509.writePin(coolPin, coolValue); 
 
+}
+
+void processPump()
+{ if (!pump1Value){mySwitch.send(f11on, 24);}
+ else {mySwitch.send(f11off, 24);}
+ if (!pump2Value){mySwitch.send(f24on, 24);}
+ else {mySwitch.send(f24off, 24);}
 }
 
 
@@ -185,6 +186,7 @@ void CleanMode()
  coolValue=coolClean;
 
 processRelais();
+processPump();
 drawScreen();
 }
 
@@ -216,7 +218,7 @@ void getPHValue()
 
 
 void lightCalculator()
-{if (!manualOverride)
+{  if (!manualOverride && !cleaningInProcess)
 {  TimeSpan helpSpan  = now.unixtime() - (now.unixtime()-86400*7);  //set it to 7 days as fallback
  timeSinceLastLight  = now.unixtime() - (now.unixtime()+86400*7);  //set it to -7 days as fallback
  timeToNextLight = now.unixtime() - (now.unixtime()-86400*7);  //set it to 7 days as fallback
@@ -239,11 +241,13 @@ void lightCalculator()
   }
   calculatedPWM=oldPWM+(int(((oldPWM-newPWM)/((timeToNextLight.totalseconds())+abs(timeSinceLastLight.totalseconds())))*timeSinceLastLight.totalseconds()));
  
-}
-  if(calculatedPWM<192)  //over 35% light - coolpump on
+   if(calculatedPWM<192)  //over 35% light - coolpump on
    {coolValue=false;}
    else
    {coolValue=true;}   
+   
+}
+
 
 
 
@@ -310,7 +314,7 @@ Serial.print(timeSinceLastLight.hours(), DEC);
 
 
 void AI()
-{
+{wdt_reset();
   if (!manualOverride && !cleaningInProcess)
   { DateTime CompareLightOnTime (now.year(), now.month(),now.day(), int(powLightOnHour), int(powLightOnMinute),0);
     DateTime CompareLightOffTime (now.year(), now.month(),now.day(), int(powLightOffHour), int(powLightOffMinute),0);
@@ -318,9 +322,6 @@ void AI()
     DateTime CompareCO2OffTime (now.year(), now.month(),now.day(), int(powCo2OffHour), int(powCo2OffMinute),0);
     DateTime CompareScreenOffTime (now.year(), now.month(),now.day(), int(screenOnHour), int(screenOnMinute),0);
     DateTime CompareScreenOnTime (now.year(), now.month(),now.day(), int(screenOffHour), int(screenOffMinute),0);
-        
-     pump1Value=false;
-     pump2Value=false;
      //turn lights on or off
      if (now.unixtime() >CompareLightOnTime.unixtime() && now.unixtime() <CompareLightOffTime.unixtime())
        {light230Value=false;
