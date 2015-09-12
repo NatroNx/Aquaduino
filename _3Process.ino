@@ -186,7 +186,7 @@ void CleanMode()
 {if (!cleaningInProcess)
  {cleanEnd=now.unixtime()+(60*cleanMinutes);}
  cleaningInProcess=true;
- calculatedPWM=75;
+ calculatedPWM=229.5;
  pump1Value=pump1Clean;
  pump2Value=pump2Clean;
  light230Value=light230Clean;
@@ -694,40 +694,40 @@ lightPWM[11].pwmValue=EEPROM.read(55);
 void saveLightPWM()
 {EEPROM.write(20,lightPWM[0].Hour);
 EEPROM.write(21,lightPWM[0].Minute);
-EEPROM.write(22,lightPWM[0].pwmValue);
+EEPROM.write(22,byte(lightPWM[0].pwmValue));
 EEPROM.write(23,lightPWM[1].Hour);
 EEPROM.write(24,lightPWM[1].Minute);
-EEPROM.write(25,lightPWM[1].pwmValue);
+EEPROM.write(25,byte(lightPWM[1].pwmValue));
 EEPROM.write(26,lightPWM[2].Hour);
 EEPROM.write(27,lightPWM[2].Minute);
-EEPROM.write(28,lightPWM[2].pwmValue);
+EEPROM.write(28,byte(lightPWM[2].pwmValue));
 EEPROM.write(29,lightPWM[3].Hour);
 EEPROM.write(30,lightPWM[3].Minute);
-EEPROM.write(31,lightPWM[3].pwmValue);
+EEPROM.write(31,byte(lightPWM[3].pwmValue));
 EEPROM.write(32,lightPWM[4].Hour);
 EEPROM.write(33,lightPWM[4].Minute);
-EEPROM.write(34,lightPWM[4].pwmValue);
+EEPROM.write(34,byte(lightPWM[4].pwmValue));
 EEPROM.write(35,lightPWM[5].Hour);
 EEPROM.write(36,lightPWM[5].Minute);
-EEPROM.write(37,lightPWM[5].pwmValue);
+EEPROM.write(37,byte(lightPWM[5].pwmValue));
 EEPROM.write(38,lightPWM[6].Hour);
 EEPROM.write(39,lightPWM[6].Minute);
-EEPROM.write(40,lightPWM[6].pwmValue);
+EEPROM.write(40,byte(lightPWM[6].pwmValue));
 EEPROM.write(41,lightPWM[7].Hour);
 EEPROM.write(42,lightPWM[7].Minute);
-EEPROM.write(43,lightPWM[7].pwmValue);
+EEPROM.write(43,byte(lightPWM[7].pwmValue));
 EEPROM.write(44,lightPWM[8].Hour);
 EEPROM.write(45,lightPWM[8].Minute);
-EEPROM.write(46,lightPWM[8].pwmValue);
+EEPROM.write(46,byte(lightPWM[8].pwmValue));
 EEPROM.write(47,lightPWM[9].Hour);
 EEPROM.write(48,lightPWM[9].Minute);
-EEPROM.write(49,lightPWM[9].pwmValue);
+EEPROM.write(49,byte(lightPWM[9].pwmValue));
 EEPROM.write(50,lightPWM[10].Hour);
 EEPROM.write(51,lightPWM[10].Minute);
-EEPROM.write(52,lightPWM[10].pwmValue);
+EEPROM.write(52,byte(lightPWM[10].pwmValue));
 EEPROM.write(53,lightPWM[11].Hour);
 EEPROM.write(54,lightPWM[11].Minute);
-EEPROM.write(55,lightPWM[11].pwmValue);
+EEPROM.write(55,byte(lightPWM[11].pwmValue));
 
 }
 

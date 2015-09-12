@@ -255,8 +255,8 @@ void drawClockPhPWM()
 void drawPWM()
 {  
    myGLCD.setFont(UbuntuBold);
-   myGLCD.setColor(255/calculatedPWM,0);
-   if (calculatedPWM>=26) 
+   myGLCD.setColor(255,int(calculatedPWM),0);
+   if (calculatedPWM>=25.5) 
      {
      // myGLCD.printNumI(int(100-calculatedPWM*100/180+75/1.8), 23,392,3);
       myGLCD.printNumI(int(calculatedPWM*100/255), 23,392,3);

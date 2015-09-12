@@ -198,7 +198,7 @@ TimeSpan timeToNextLight;
 byte currentPWM=0; //0 - which is NO light
 byte nextPWM=0;
 byte lightPwmPin=9;              //the pin used for pwm
-byte calculatedPWM=0;          //the value
+float calculatedPWM=0;          //the value
 const byte backlightPIN=44;      // Pin 44 used for backlight  
 
 
@@ -262,7 +262,7 @@ typedef struct
   {
       byte Hour;
       byte Minute;
-      byte pwmValue;
+      float pwmValue;
   }  record_type;
 
 record_type lightPWM[12];
@@ -663,22 +663,28 @@ readScreenScreen();
         }
         else if (((x>=LightUp[0]) && (x<=LightUp[2]))  && ((y>=LightUp[1]) && (y<=LightUp[3]))) // pwmUp
         {//waitForIt(LightUp[0], LightUp[1], LightUp[2], LightUp[3]);
-        calculatedPWM+=2;
-        /*if(calculatedPWM<75)
+        calculatedPWM+=2.55;
+        if(calculatedPWM>255)
+        {calculatedPWM=0;
+        }
+        if(calculatedPWM<0)
         {calculatedPWM=255;
         }
-        */
+
         manualOverride=true;
         drawPWM();
         }        
         else if (((x>=LightDown[0]) && (x<=LightDown[2]))  && ((y>=LightDown[1]) && (y<=LightDown[3]))) // pwmDown
         {//waitForIt(LightDown[0], LightDown[1], LightDown[2], LightDown[3]);
         manualOverride=true;
-        calculatedPWM-=2;
-        /*if(calculatedPWM<75)
-        {calculatedPWM=75;
+        calculatedPWM-=2.55;
+        if(calculatedPWM>255)
+        {calculatedPWM=0;
         }
-        */
+        if(calculatedPWM<0)
+        {calculatedPWM=255;
+        }
+
         drawPWM();
         }
         break;
@@ -974,20 +980,25 @@ readScreenScreen();
         else if (((x>=powLightOffMinuteUp[0]) && (x<=powLightOffMinuteUp[2]))  && ((y>=powLightOffMinuteUp[1]) && (y<=powLightOffMinuteUp[3]))) // homebutton
         {waitForIt(powLightOffMinuteUp[0], powLightOffMinuteUp[1], powLightOffMinuteUp[2], powLightOffMinuteUp[3]);
          
-         lightPWM[lightScreenSet].pwmValue+=2;
-        /* if(lightPWM[lightScreenSet].pwmValue<75)
+         lightPWM[lightScreenSet].pwmValue+=2.55;
+        if(lightPWM[lightScreenSet].pwmValue>255)
+        {lightPWM[lightScreenSet].pwmValue=0;
+        }
+        if(lightPWM[lightScreenSet].pwmValue<0)
         {lightPWM[lightScreenSet].pwmValue=255;
         }
-        */
+        
          UpdateLightScene();
         }
         else if (((x>=powLightOffMinuteDown[0]) && (x<=powLightOffMinuteDown[2]))  && ((y>=powLightOffMinuteDown[1]) && (y<=powLightOffMinuteDown[3]))) // homebutton
         {waitForIt(powLightOffMinuteDown[0], powLightOffMinuteDown[1], powLightOffMinuteDown[2], powLightOffMinuteDown[3]);
-        lightPWM[lightScreenSet].pwmValue-=2;
-        /* if(lightPWM[lightScreenSet].pwmValue<75)
-        {lightPWM[lightScreenSet].pwmValue=75;
+        lightPWM[lightScreenSet].pwmValue-=2.55;
+        if(lightPWM[lightScreenSet].pwmValue>255)
+        {lightPWM[lightScreenSet].pwmValue=0;
         }
-        */
+        if(lightPWM[lightScreenSet].pwmValue<0)
+        {lightPWM[lightScreenSet].pwmValue=255;
+        }
          UpdateLightScene();
         }  
         else if (((x>=powCo2OnHourUp[0]) && (x<=powCo2OnHourUp[2]))  && ((y>=powCo2OnHourUp[1]) && (y<=powCo2OnHourUp[3]))) // homebutton
@@ -1016,20 +1027,24 @@ readScreenScreen();
         }
         else if (((x>=powCo2OffMinuteUp[0]) && (x<=powCo2OffMinuteUp[2]))  && ((y>=powCo2OffMinuteUp[1]) && (y<=powCo2OffMinuteUp[3]))) // homebutton
         {waitForIt(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], powCo2OffMinuteUp[2], powCo2OffMinuteUp[3]);
-         lightPWM[lightScreenSet+1].pwmValue+=2;
-        /*if(lightPWM[lightScreenSet+1].pwmValue<75)
+         lightPWM[lightScreenSet+1].pwmValue+=2.55;
+        if(lightPWM[lightScreenSet+1].pwmValue>255)
+        {lightPWM[lightScreenSet+1].pwmValue=0;
+        }
+        if(lightPWM[lightScreenSet+1].pwmValue<0)
         {lightPWM[lightScreenSet+1].pwmValue=255;
         }
-        */
          UpdateLightScene();
         }
         else if (((x>=powCo2OffMinuteDown[0]) && (x<=powCo2OffMinuteDown[2]))  && ((y>=powCo2OffMinuteDown[1]) && (y<=powCo2OffMinuteDown[3]))) // homebutton
         {waitForIt(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], powCo2OffMinuteDown[2], powCo2OffMinuteDown[3]);
-        lightPWM[lightScreenSet+1].pwmValue-=2;
-        /*if(lightPWM[lightScreenSet+1].pwmValue<75)
-        {lightPWM[lightScreenSet+1].pwmValue=75;
+        lightPWM[lightScreenSet+1].pwmValue-=2.55;
+        if(lightPWM[lightScreenSet+1].pwmValue>255)
+        {lightPWM[lightScreenSet+1].pwmValue=0;
         }
-        */
+        if(lightPWM[lightScreenSet+1].pwmValue<0)
+        {lightPWM[lightScreenSet+1].pwmValue=255;
+        }
         UpdateLightScene();
         }
         else if (((x>=SetPowerSchedCord[0]) && (x<=SetPowerSchedCord[2]))  && ((y>=SetPowerSchedCord[1]) && (y<=SetPowerSchedCord[3]))) // homebutton
@@ -1760,7 +1775,7 @@ if(!myTouch.dataAvailable())
    }   
 
       
- if (currentMillis - prevMillis1min > 60000)  //every 60 seconds update our data
+ if (currentMillis - prevMillis1min > 30000)  //every 30 seconds update our data
   {   prevMillis1min=millis();
        printDate(now, 5,5);
 
@@ -1791,7 +1806,7 @@ if(!myTouch.dataAvailable())
   }
       
       
-if (currentMillis - prevMillis15min > 900000)  //every 15 minutes update our data
+if (currentMillis - prevMillis15min > 900000)  //every 15 minutes write to file
   {   prevMillis15min=millis();       
        writeFile();      
   }  
