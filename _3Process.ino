@@ -56,11 +56,22 @@ f23on //Coolpump ON
 
 }
 
-void processPump()
-{ if (!pump1Value){mySwitch.send(f11on, 24);}
+
+void processPump() //2 times cause sometimes it doesnt switch
+{ delay(100);
+if (!pump1Value){mySwitch.send(f11on, 24);}
  else {mySwitch.send(f11off, 24);}
- if (!pump2Value){mySwitch.send(f24on, 24);}
- else {mySwitch.send(f24off, 24);}
+ delay(100);
+ if (!pump2Value){mySwitch.send(f42on, 24);}
+ else {mySwitch.send(f42off, 24);}
+ 
+  delay(100);
+if (!pump1Value){mySwitch.send(f11on, 24);}
+ else {mySwitch.send(f11off, 24);}
+ delay(100);
+ if (!pump2Value){mySwitch.send(f42on, 24);}
+ else {mySwitch.send(f42off, 24);}
+ 
 }
 
 
@@ -106,7 +117,7 @@ void processSingleRelais(int SR)
 void UpdateClockAndLight()
  {
     now = rtc.now();
-    
+    //calculatedPWM=calculatedPWM+255;
     analogWrite(lightPwmPin, calculatedPWM);
  }
  
@@ -184,10 +195,10 @@ void CleanMode()
  co2Value=co2Clean;
  heaterValue=heaterClean;
  coolValue=coolClean;
-
+ drawScreen();
 processRelais();
 processPump();
-drawScreen();
+
 }
 
 void getPHValue()
@@ -241,7 +252,7 @@ void lightCalculator()
   }
   calculatedPWM=oldPWM+(int(((oldPWM-newPWM)/((timeToNextLight.totalseconds())+abs(timeSinceLastLight.totalseconds())))*timeSinceLastLight.totalseconds()));
  
-   if(calculatedPWM<192)  //over 35% light - coolpump on
+   if(calculatedPWM>90)  //over 35% light - coolpump on
    {coolValue=false;}
    else
    {coolValue=true;}   
@@ -356,6 +367,17 @@ void AI()
 
   processRelais();
   updateHomeScreen();
+  }
+  else if(!manualOverride && (now.unixtime() >= cleanEnd.unixtime()))
+  {      cleaningInProcess=false;
+          pump1Value=false;
+          pump2Value=false;
+          dispScreen=0;
+          drawScreen();
+          //processRelais();          
+          lightCalculator();
+          AI();
+          processPump();
   }
   
   

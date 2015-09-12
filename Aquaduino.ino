@@ -1,5 +1,11 @@
 //Aquaduino
 // v.1.1  - 21.08.15
+// v.1.2  - 05.09.15
+// v.1.3  - 12.09.15 - PWM Dimmung angepasst an MOSFET Steuerung hinter dem Netzteil
+
+
+
+
 
 //needed Libraries 
 #include <SdFat.h>
@@ -189,10 +195,10 @@ byte cleanMinutes=120;
 
 TimeSpan timeSinceLastLight;
 TimeSpan timeToNextLight;
-byte currentPWM=255; //255 - which is NO light
-byte nextPWM=255;
+byte currentPWM=0; //0 - which is NO light
+byte nextPWM=0;
 byte lightPwmPin=9;              //the pin used for pwm
-byte calculatedPWM=255;          //the value
+byte calculatedPWM=0;          //the value
 const byte backlightPIN=44;      // Pin 44 used for backlight  
 
 
@@ -226,7 +232,7 @@ const unsigned long f22off = 4539732;  //CO2 OFF
 const unsigned long f23on = 4542805;   //Coolpump ON
 const unsigned long f23off= 4542804;  //Coolpump OFF
 const unsigned long f24on= 4543573;  //Pump2 ON
-const unsigned long f24off=4543572;//Pump2 Off 
+const unsigned long f24off=4543572;
 const unsigned long f31on = 5313877;
 const unsigned long f31off = 5313876;
 const unsigned long f32on = 5326165;
@@ -237,8 +243,8 @@ const unsigned long f34on= 5330005;
 const unsigned long f34off=5330004;
 const unsigned long f41on = 5510485;
 const unsigned long f41off = 5510484;
-const unsigned long f42on = 5522773;
-const unsigned long f42off = 5522772;
+const unsigned long f42on = 5522773;  //Pump2 ON
+const unsigned long f42off = 5522772; //Pump2 Off 
 const unsigned long f43on = 5525845;
 const unsigned long f43off= 5525844;
 const unsigned long f44on= 5526613;  
@@ -293,7 +299,7 @@ const Color col_FertiFE =  {204,17,17};
 //Buttonkoordinaten Home
 const short Button1Cord[] = {0, 0 ,0, 0};
 const short HomeButtonCoord[] = {21, 613 ,117, 710};
-const short CleanButtonCoord[] = {133, 613 ,230, 710};
+const short FeedButtonCoord[] = {133, 613 ,230, 710};
 const short PowerButtonCoord[] = {249, 613 ,346, 710};
 const short SettingsButtonCoord[] = {362, 613 ,458, 710};
 const short LightUp[]={60,320,108,368};
@@ -310,6 +316,7 @@ const short HeaterCord[] = {250, 318 ,324, 392};
 const short CoolingCord[] = {20, 402 ,94, 476};
 const short AllOFFCord[] = {20, 524 ,94, 598};
 const short ResetCord[] = {20, 608 ,94, 682};
+const short CleanModeCord[] = {250, 524 ,324, 598};
 
 //Settingbuttoncords
 const short PowerSchedCord[] = {68, 150 ,142, 224};
@@ -622,11 +629,14 @@ readScreenScreen();
         dispScreen=0;
         drawScreen();
         }
-        else if (((x>=CleanButtonCoord[0]) && (x<=CleanButtonCoord[2]))  && ((y>=CleanButtonCoord[1]) && (y<=CleanButtonCoord[3]))) // CleanButton
-        {waitForIt(CleanButtonCoord[0], CleanButtonCoord[1], CleanButtonCoord[2], CleanButtonCoord[3]);
+        else if (((x>=FeedButtonCoord[0]) && (x<=FeedButtonCoord[2]))  && ((y>=FeedButtonCoord[1]) && (y<=FeedButtonCoord[3])))
+        {waitForIt(FeedButtonCoord[0], FeedButtonCoord[1], FeedButtonCoord[2], FeedButtonCoord[3]);
+        light2Value=true;
+        light1Value=true;
+        manualOverride=true;
         dispScreen=1;
-        drawScreen();
-        CleanMode();
+        drawScreen();        
+        processRelais();
         
         }
         else if (((x>=PowerButtonCoord[0]) && (x<=PowerButtonCoord[2]))  && ((y>=PowerButtonCoord[1]) && (y<=PowerButtonCoord[3]))) // powerbutton
@@ -653,26 +663,27 @@ readScreenScreen();
         }
         else if (((x>=LightUp[0]) && (x<=LightUp[2]))  && ((y>=LightUp[1]) && (y<=LightUp[3]))) // pwmUp
         {//waitForIt(LightUp[0], LightUp[1], LightUp[2], LightUp[3]);
-        calculatedPWM-=2;
-        if(calculatedPWM<75)
+        calculatedPWM+=2;
+        /*if(calculatedPWM<75)
         {calculatedPWM=255;
         }
-        
+        */
         manualOverride=true;
         drawPWM();
         }        
         else if (((x>=LightDown[0]) && (x<=LightDown[2]))  && ((y>=LightDown[1]) && (y<=LightDown[3]))) // pwmDown
         {//waitForIt(LightDown[0], LightDown[1], LightDown[2], LightDown[3]);
         manualOverride=true;
-        calculatedPWM+=2;
-        if(calculatedPWM<75)
+        calculatedPWM-=2;
+        /*if(calculatedPWM<75)
         {calculatedPWM=75;
         }
+        */
         drawPWM();
         }
         break;
  
-        // Caputre Buttons @ CleanScreen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Caputre Buttons @ FeedScreen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        case 1:
        if (((x>=BottomButtonCoord[0]) && (x<=BottomButtonCoord[2]))  && ((y>=BottomButtonCoord[1]) && (y<=BottomButtonCoord[3]))) // homebutton
         {waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
@@ -681,6 +692,21 @@ readScreenScreen();
         drawScreen();
        
         }
+        
+        else if (((x>=ResetCord[0]) && (x<=ResetCord[2]))  && ((y>=ResetCord[1]) && (y<=ResetCord[3]))) // homebutton
+        { waitForIt(ResetCord[0], ResetCord[1], ResetCord[2], ResetCord[3]);
+          manualOverride=false;
+          
+          dispScreen=0;
+          drawScreen();
+          //processRelais();          
+          lightCalculator();
+          AI();
+        
+        } 
+        
+        
+        
        break;
  
           // Caputre Buttons @ PowerScreen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -692,7 +718,7 @@ readScreenScreen();
         }     
        else if (((x>=Filter1Cord[0]) && (x<=Filter1Cord[2]))  && ((y>=Filter1Cord[1]) && (y<=Filter1Cord[3]))) // homebutton
         {  waitForIt(Filter1Cord[0], Filter1Cord[1], Filter1Cord[2], Filter1Cord[3]);
-           manualOverride=1;
+           manualOverride=true;
            pump1Value=!pump1Value;
            updatePowerIcons();
            if (!pump1Value){mySwitch.send(f11on, 24);}
@@ -701,17 +727,17 @@ readScreenScreen();
         }
         else if (((x>=Filter2Cord[0]) && (x<=Filter2Cord[2]))  && ((y>=Filter2Cord[1]) && (y<=Filter2Cord[3]))) // homebutton
         { waitForIt(Filter2Cord[0], Filter2Cord[1], Filter2Cord[2], Filter2Cord[3]);
-          manualOverride=1;
+          manualOverride=true;
           pump2Value=!pump2Value;
           updatePowerIcons();
-           if (!pump2Value){mySwitch.send(f24on, 24);}
-           else {mySwitch.send(f24off, 24);}
+           if (!pump2Value){mySwitch.send(f42on, 24);}
+           else {mySwitch.send(f42off, 24);}
         }
           
           
         else if (((x>=Ligth1Cord[0]) && (x<=Ligth1Cord[2]))  && ((y>=Ligth1Cord[1]) && (y<=Ligth1Cord[3]))) // homebutton
         { waitForIt(Ligth1Cord[0], Ligth1Cord[1], Ligth1Cord[2], Ligth1Cord[3]);
-          manualOverride=1;
+          manualOverride=true;
           light230Value=!light230Value;
           updatePowerIcons();
           if (!light230Value){mySwitch.send(f13on, 24);}
@@ -720,7 +746,7 @@ readScreenScreen();
         }
         else if (((x>=Light2Cord[0]) && (x<=Light2Cord[2]))  && ((y>=Light2Cord[1]) && (y<=Light2Cord[3]))) // homebutton
         { waitForIt(Light2Cord[0], Light2Cord[1], Light2Cord[2], Light2Cord[3]);
-          manualOverride=1;
+          manualOverride=true;
           light1Value=!light1Value;
           light2Value=!light2Value;
           updatePowerIcons();
@@ -729,7 +755,7 @@ readScreenScreen();
         }
         else if (((x>=Co2Cord[0]) && (x<=Co2Cord[2]))  && ((y>=Co2Cord[1]) && (y<=Co2Cord[3]))) // homebutton
         { waitForIt(Co2Cord[0], Co2Cord[1], Co2Cord[2], Co2Cord[3]);
-          manualOverride=1;
+          manualOverride=true;
           co2Value=!co2Value;
           updatePowerIcons();
            if (!co2Value){mySwitch.send(f22on, 24);}
@@ -737,7 +763,7 @@ readScreenScreen();
         }
         else if (((x>=HeaterCord[0]) && (x<=HeaterCord[2]))  && ((y>=HeaterCord[1]) && (y<=HeaterCord[3]))) // homebutton
         { waitForIt(HeaterCord[0], HeaterCord[1], HeaterCord[2], HeaterCord[3]);
-          manualOverride=1;
+          manualOverride=true;
           heaterValue=!heaterValue;
           updatePowerIcons();
           if (!heaterValue){mySwitch.send(f21on, 24);}
@@ -746,7 +772,7 @@ readScreenScreen();
         }
         else if (((x>=CoolingCord[0]) && (x<=CoolingCord[2]))  && ((y>=CoolingCord[1]) && (y<=CoolingCord[3]))) // homebutton
         { waitForIt(CoolingCord[0], CoolingCord[1], CoolingCord[2], CoolingCord[3]);
-          manualOverride=1;
+          manualOverride=true;
           coolValue=!coolValue;
           updatePowerIcons();
           if (!coolValue){mySwitch.send(f23on, 24);}
@@ -755,7 +781,7 @@ readScreenScreen();
         }
         else if (((x>=AllOFFCord[0]) && (x<=AllOFFCord[2]))  && ((y>=AllOFFCord[1]) && (y<=AllOFFCord[3]))) // homebutton
         { waitForIt(AllOFFCord[0], AllOFFCord[1], AllOFFCord[2], AllOFFCord[3]);
-          manualOverride=1;
+          manualOverride=false;
           pump1Value=true;
           pump2Value=true;
           light230Value=true;
@@ -765,13 +791,15 @@ readScreenScreen();
           heaterValue=true;
           coolValue=true;
           updatePowerIcons();
+          processPump();
           processRelais();
           processPump();
         
         }
-       else if (((x>=ResetCord[0]) && (x<=ResetCord[2]))  && ((y>=ResetCord[1]) && (y<=ResetCord[3]))) // homebutton
+       else if (((x>=ResetCord[0]) && (x<=ResetCord[2]))  && ((y>=ResetCord[1]) && (y<=ResetCord[3]))) // Resetbutton
         { waitForIt(ResetCord[0], ResetCord[1], ResetCord[2], ResetCord[3]);
-          manualOverride=0;
+          manualOverride=false;
+          cleaningInProcess=false;
           pump1Value=false;
           pump2Value=false;
           dispScreen=0;
@@ -782,6 +810,21 @@ readScreenScreen();
           processPump();
         
         }
+        
+        else if (((x>=CleanModeCord[0]) && (x<=CleanModeCord[2]))  && ((y>=CleanModeCord[1]) && (y<=CleanModeCord[3]))) // Cleanbutton
+        { waitForIt(CleanModeCord[0], CleanModeCord[1], CleanModeCord[2], CleanModeCord[3]);
+
+        CleanMode();
+
+        
+        }
+        
+        
+        
+        
+        
+        
+        
    
         break;
   
@@ -931,18 +974,20 @@ readScreenScreen();
         else if (((x>=powLightOffMinuteUp[0]) && (x<=powLightOffMinuteUp[2]))  && ((y>=powLightOffMinuteUp[1]) && (y<=powLightOffMinuteUp[3]))) // homebutton
         {waitForIt(powLightOffMinuteUp[0], powLightOffMinuteUp[1], powLightOffMinuteUp[2], powLightOffMinuteUp[3]);
          
-         lightPWM[lightScreenSet].pwmValue-=2;
-         if(lightPWM[lightScreenSet].pwmValue<75)
+         lightPWM[lightScreenSet].pwmValue+=2;
+        /* if(lightPWM[lightScreenSet].pwmValue<75)
         {lightPWM[lightScreenSet].pwmValue=255;
         }
+        */
          UpdateLightScene();
         }
         else if (((x>=powLightOffMinuteDown[0]) && (x<=powLightOffMinuteDown[2]))  && ((y>=powLightOffMinuteDown[1]) && (y<=powLightOffMinuteDown[3]))) // homebutton
         {waitForIt(powLightOffMinuteDown[0], powLightOffMinuteDown[1], powLightOffMinuteDown[2], powLightOffMinuteDown[3]);
-        lightPWM[lightScreenSet].pwmValue+=2;
-         if(lightPWM[lightScreenSet].pwmValue<75)
+        lightPWM[lightScreenSet].pwmValue-=2;
+        /* if(lightPWM[lightScreenSet].pwmValue<75)
         {lightPWM[lightScreenSet].pwmValue=75;
         }
+        */
          UpdateLightScene();
         }  
         else if (((x>=powCo2OnHourUp[0]) && (x<=powCo2OnHourUp[2]))  && ((y>=powCo2OnHourUp[1]) && (y<=powCo2OnHourUp[3]))) // homebutton
@@ -971,18 +1016,20 @@ readScreenScreen();
         }
         else if (((x>=powCo2OffMinuteUp[0]) && (x<=powCo2OffMinuteUp[2]))  && ((y>=powCo2OffMinuteUp[1]) && (y<=powCo2OffMinuteUp[3]))) // homebutton
         {waitForIt(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], powCo2OffMinuteUp[2], powCo2OffMinuteUp[3]);
-         lightPWM[lightScreenSet+1].pwmValue-=2;
-        if(lightPWM[lightScreenSet+1].pwmValue<75)
+         lightPWM[lightScreenSet+1].pwmValue+=2;
+        /*if(lightPWM[lightScreenSet+1].pwmValue<75)
         {lightPWM[lightScreenSet+1].pwmValue=255;
         }
+        */
          UpdateLightScene();
         }
         else if (((x>=powCo2OffMinuteDown[0]) && (x<=powCo2OffMinuteDown[2]))  && ((y>=powCo2OffMinuteDown[1]) && (y<=powCo2OffMinuteDown[3]))) // homebutton
         {waitForIt(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], powCo2OffMinuteDown[2], powCo2OffMinuteDown[3]);
-        lightPWM[lightScreenSet+1].pwmValue+=2;
-        if(lightPWM[lightScreenSet+1].pwmValue<75)
+        lightPWM[lightScreenSet+1].pwmValue-=2;
+        /*if(lightPWM[lightScreenSet+1].pwmValue<75)
         {lightPWM[lightScreenSet+1].pwmValue=75;
         }
+        */
         UpdateLightScene();
         }
         else if (((x>=SetPowerSchedCord[0]) && (x<=SetPowerSchedCord[2]))  && ((y>=SetPowerSchedCord[1]) && (y<=SetPowerSchedCord[3]))) // homebutton

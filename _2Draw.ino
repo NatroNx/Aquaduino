@@ -15,7 +15,7 @@ switch (dispScreen)
 
     break;
     case 1:  // clean screen
-    CleanScreen();
+    FeedScreen();
     break;
     case 2:  // power screen
     PowerScreen();
@@ -156,7 +156,7 @@ updateHomeScreen();
     myFiles.load(21, 615,438,96, "DockNew.raw");  
     myGLCD.setFont(BigFont);
     myGLCD.print("Home", 37, 720);
-    myGLCD.print("Clean", 143, 720);
+    myGLCD.print("Feed", 149, 720);
     myGLCD.print("Power", 256, 720);
     myGLCD.print("Setting", 357, 720);
 
@@ -255,13 +255,14 @@ void drawClockPhPWM()
 void drawPWM()
 {  
    myGLCD.setFont(UbuntuBold);
-   myGLCD.setColor(255,int(2.55*(100-calculatedPWM*100/180+75/1.8)-1),0);
-   if (calculatedPWM>=239) 
+   myGLCD.setColor(255/calculatedPWM,0);
+   if (calculatedPWM>=26) 
      {
-      myGLCD.printNumI(int(100-calculatedPWM*100/180+75/1.8), 23,392,3);
+     // myGLCD.printNumI(int(100-calculatedPWM*100/180+75/1.8), 23,392,3);
+      myGLCD.printNumI(int(calculatedPWM*100/255), 23,392,3);
       }
    else 
-     {myGLCD.printNumI(int(100-calculatedPWM*100/180+75/1.8), 27,392,3);
+     {myGLCD.printNumI(int(calculatedPWM*100/255), 27,392,3);
      
      }
      myGLCD.print("%" , 108,392,3);
@@ -274,19 +275,21 @@ void drawPWM()
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//1. CleanScreen
-void CleanScreen()
+//1. FeedScreen
+void FeedScreen()
 {  //Statusline TOP
    wdt_reset();
    myGLCD.setFont(UbuntuBold);
    myGLCD.setColor(0,219,0);
-   myGLCD.print("CLEANING     ", 77,40);
+   myGLCD.print("FEEDING     ", 77,40);
    myFiles.load(6, 24, 60,60, "60Clea.raw");
    myGLCD.setColor(255,255,255);
    myGLCD.drawLine(66,75,450,75);
-   myGLCD.print("Cleaning",20,136);
+      //end of >TOP
+   myGLCD.print("FEEDING",20,136);
    myGLCD.print("in progress...",135,180);
-   //end of >TOP
+   myGLCD.print("RESET", 110, 635);
+   myFiles.load(20, 608,74,74, "74Reset.raw");
 
   
    if(!pump1Value) { myFiles.load(340, 290,48,48, "3filt_N.raw");}
@@ -314,13 +317,15 @@ void CleanScreen()
   myGLCD.setColor(col_white.r, col_white.g,col_white.b);
   myFiles.load(80, 310,184,184, "2feeding.raw"); 
   myGLCD.setFont(BigFont);
-  myGLCD.print("Clean mode ends at:", 20, 520);
+
+/*  myGLCD.print("Feed mode ends at:", 20, 520);
   myGLCD.setFont(UbuntuBold);
   myGLCD.printNumI(cleanEnd.hour(), 110,564,2,48);
   myGLCD.print(":", 160,564);
   myGLCD.printNumI(cleanEnd.minute(), 180,564,2,48);   
+**/
 
-   //footer starts here
+//footer starts here
    myGLCD.setColor(col_white.r, col_white.g, col_white.b);
    myGLCD.drawLine(30,770,196,770); 
    myGLCD.drawLine(284,770,450,770); 
@@ -352,7 +357,13 @@ void PowerScreen()
     myGLCD.setColor(col_red.r, col_red.g, col_red.b);
    if(manualOverride) {myGLCD.print("Manual Override is active", 20,100);}
    else {myGLCD.print("                         ", 20,100);}
-   if(cleaningInProcess) {myGLCD.print("Cleaning in progress", 20,125);}
+   if(cleaningInProcess) 
+     {  myGLCD.print("Cleaning ends @", 20,125);
+        myGLCD.setColor(col_white.r, col_white.g, col_white.b);
+        myGLCD.printNumI(cleanEnd.hour(), 310-30,125,2,48);
+        myGLCD.print(":", 360-30,125);
+        myGLCD.printNumI(cleanEnd.minute(), 380-30,125,2,48);   
+ }
    else {myGLCD.print("                         ", 20,125);}
    myGLCD.setColor(col_white.r, col_white.g, col_white.b);
    myGLCD.print("Filter 1", 110, 180);
@@ -364,6 +375,13 @@ void PowerScreen()
    myGLCD.print("Cooling", 110, 432);
    myGLCD.print("ALL OFF", 110, 550);
    myGLCD.print("RESET", 110, 635);
+   myGLCD.print("CLEAN", 334, 550);
+
+
+
+
+
+
    
  
    
@@ -394,6 +412,7 @@ void updatePowerIcons()
    else { myFiles.load(20, 402,74,74, "74Fan_F.raw"); }
    myFiles.load(20, 524,74,74, "74OFF.raw");
    myFiles.load(20, 608,74,74, "74Reset.raw");
+    myFiles.load(250, 524,74,74, "74CleanN.raw");  //Cleanmode
 }
 
 
@@ -412,7 +431,7 @@ void SettingsScreen()
    //end of >TOP
     myFiles.load(PowerSchedCord[0], PowerSchedCord[1],74,74, "74Powe.raw"); 
     myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw"); 
-    myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw"); 
+    myFiles.load(CleanCord[0], CleanCord[1],74,74, "74CleanN.raw"); 
     myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw"); 
     myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw"); 
     myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw"); 
@@ -454,9 +473,9 @@ void LightsScreen()
    myGLCD.print(":",420,140);
    myGLCD.printNumI(lightPWM[1].Minute,435,140,2,48);
    myGLCD.setColor(182,0,255);
-   myGLCD.printNumI(int(100-lightPWM[0].pwmValue*100/180+75/1.8) , 274,170,3);
+   myGLCD.printNumI(int(lightPWM[0].pwmValue*100/255) , 274,170,3);
    myGLCD.print("%", 320,170);
-   myGLCD.printNumI(int(100-lightPWM[1].pwmValue*100/180+75/1.8) , 404,170,3);
+   myGLCD.printNumI(int(lightPWM[1].pwmValue*100/255) , 404,170,3);
    myGLCD.print("%", 450,170);
    
    
@@ -470,9 +489,10 @@ void LightsScreen()
    myGLCD.print(":",420,230);
    myGLCD.printNumI(lightPWM[3].Minute,435,230,2,48);
    myGLCD.setColor(182,0,255);
-   myGLCD.printNumI(int(100-lightPWM[2].pwmValue*100/180+75/1.8) , 274,260,3);
+   myGLCD.printNumI(int(lightPWM[2].pwmValue*100/255) , 274,260,3);
+   //int(calculatedPWM*100/255
    myGLCD.print("%", 320,260);
-   myGLCD.printNumI(int(100-lightPWM[3].pwmValue*100/180+75/1.8) , 404,260,3);
+   myGLCD.printNumI(int(lightPWM[3].pwmValue*100/255) , 404,260,3);
    myGLCD.print("%", 450,260);
    
    myGLCD.setColor(255,255,255);
@@ -485,9 +505,9 @@ void LightsScreen()
    myGLCD.print(":",420,320);
    myGLCD.printNumI(lightPWM[5].Minute,435,320,2,48);
    myGLCD.setColor(182,0,255);
-   myGLCD.printNumI(int(100-lightPWM[4].pwmValue*100/180+75/1.8) , 274,350,3);
+   myGLCD.printNumI(int(lightPWM[4].pwmValue*100/255) , 274,350,3);
    myGLCD.print("%", 320,350);
-   myGLCD.printNumI(int(100-lightPWM[5].pwmValue*100/180+75/1.8) , 404,350,3);
+   myGLCD.printNumI(int(lightPWM[5].pwmValue*100/255) , 404,350,3);
    myGLCD.print("%", 450,350);
    
    myGLCD.setColor(255,255,255);
@@ -500,9 +520,9 @@ void LightsScreen()
    myGLCD.print(":",420,410);
    myGLCD.printNumI(lightPWM[7].Minute,435,410,2,48);
    myGLCD.setColor(182,0,255);
-   myGLCD.printNumI(int(100-lightPWM[6].pwmValue*100/180+75/1.8) , 274,440,3);
+   myGLCD.printNumI(int(lightPWM[6].pwmValue*100/255) , 274,440,3);
    myGLCD.print("%", 320,440);
-   myGLCD.printNumI(int(100-lightPWM[7].pwmValue*100/180+75/1.8) , 404,440,3);
+   myGLCD.printNumI(int(lightPWM[7].pwmValue*100/255) , 404,440,3);
    myGLCD.print("%", 450,440);
    
    myGLCD.setColor(255,255,255);
@@ -515,9 +535,9 @@ void LightsScreen()
    myGLCD.print(":",420,500);
    myGLCD.printNumI(lightPWM[9].Minute,435,500,2,48);
    myGLCD.setColor(182,0,255);
-   myGLCD.printNumI(int(100-lightPWM[8].pwmValue*100/180+75/1.8) , 274,530,3);
+   myGLCD.printNumI(int(lightPWM[8].pwmValue*100/255) , 274,530,3);
    myGLCD.print("%", 320,530);
-   myGLCD.printNumI(int(100-lightPWM[9].pwmValue*100/180+75/1.8) , 404,530,3);
+   myGLCD.printNumI(int(lightPWM[9].pwmValue*100/255) , 404,530,3);
    myGLCD.print("%", 450,530);
    
       myGLCD.setColor(255,255,255);
@@ -530,9 +550,9 @@ void LightsScreen()
    myGLCD.print(":",420,590);
    myGLCD.printNumI(lightPWM[11].Minute,435,590,2,48);
    myGLCD.setColor(182,0,255);
-   myGLCD.printNumI(int(100-lightPWM[10].pwmValue*100/180+75/1.8) , 274,620,3);
+   myGLCD.printNumI(int(lightPWM[10].pwmValue*100/255) , 274,620,3);
    myGLCD.print("%", 320,620);
-   myGLCD.printNumI(int(100-lightPWM[11].pwmValue*100/180+75/1.8) , 404,620,3);
+   myGLCD.printNumI(int(lightPWM[11].pwmValue*100/255) , 404,620,3);
    myGLCD.print("%", 450,620);
    
    
@@ -624,13 +644,13 @@ void UpdateLightScene()
   myGLCD.printNumI(lightPWM[lightScreenSet].Hour, 220,145,2,48);
   myGLCD.printNumI(lightPWM[lightScreenSet].Minute, 360,145,2,48);
   //myGLCD.printNumI(int(100-(lightPWM[lightScreenSet].pwmValue*100)/255), 335,275,3);
-  myGLCD.printNumI(int(100-lightPWM[lightScreenSet].pwmValue*100/180+75/1.8), 335,275,3);
+  myGLCD.printNumI(int(lightPWM[lightScreenSet].pwmValue*100/255), 335,275,3);
 
 
   myGLCD.printNumI(lightPWM[lightScreenSet+1].Hour, 220,445,2,48);
   myGLCD.printNumI(lightPWM[lightScreenSet+1].Minute, 360,445,2,48);
   //myGLCD.printNumI(int(100-(lightPWM[lightScreenSet+1].pwmValue*100)/255), 335,575,3);
-  myGLCD.printNumI(int(100-lightPWM[lightScreenSet+1].pwmValue*100/180+75/1.8), 335,575,3);
+  myGLCD.printNumI(int(lightPWM[lightScreenSet+1].pwmValue*100/255), 335,575,3);
 
   
 }
@@ -704,7 +724,7 @@ void CleanSchedScreen()
    myGLCD.setFont(UbuntuBold);
    myGLCD.setColor(0,219,0);
    myGLCD.print("CLEANING   ", 77,40);
-   myFiles.load(6, 24, 60,60, "60Clea.raw");
+   myFiles.load(6, 24, 60,60, "60CleanN.raw");
    myGLCD.setColor(255,255,255);
    myGLCD.drawLine(66,75,450,75);
    //end of >TOP
