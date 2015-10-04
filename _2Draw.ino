@@ -256,17 +256,31 @@ void drawPWM()
 {  
    myGLCD.setFont(UbuntuBold);
    myGLCD.setColor(255,int(calculatedPWM),0);
+   
+   /**debugging
+   myGLCD.printNumI(calculatedPWM, 27,392,3);  //debugging 
+   myGLCD.printNumI(newPWM, 27,440,3); 
+   myGLCD.printNumI(oldPWM, 27,468,3); 
+   myGLCD.printNumI(timeToNextLight.totalseconds(), 27,500,5);
+   myGLCD.printNumI(timeSinceLastLight.totalseconds(), 27,530,5);
+   
+  // myGLCD.printNumI(helpSpan.totalseconds(), 27,560,3);
+   
+   */
+  
+   
    if (calculatedPWM>=25.5) 
      {
      // myGLCD.printNumI(int(100-calculatedPWM*100/180+75/1.8), 23,392,3);
-      myGLCD.printNumI(int(calculatedPWM*100/255), 23,392,3);
+      myGLCD.printNumI(int(calculatedPWM*100/255), 23,392,3);  //live
+    
+      
       }
    else 
      {myGLCD.printNumI(int(calculatedPWM*100/255), 27,392,3);
-     
      }
      myGLCD.print("%" , 108,392,3);
-     
+   
 }
 
 

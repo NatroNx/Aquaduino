@@ -1,7 +1,8 @@
 //Aquaduino
-// v.1.1  - 21.08.15
-// v.1.2  - 05.09.15
-// v.1.3  - 12.09.15 - PWM Dimmung angepasst an MOSFET Steuerung hinter dem Netzteil
+// v.1.1  -  21.08.15
+// v.1.2  -  05.09.15
+// v.1.3  -  12.09.15 - PWM Dimmung angepasst an MOSFET Steuerung hinter dem Netzteil
+// v.1.3.1 - 25.09.15 - fixed a Bug in LightCalculation (false values when now.minute == nextlight.minute)
 
 
 
@@ -142,8 +143,6 @@ byte cleanFilter2Month;
 byte cleanFilter2Day;
 */
 
- 
- 
 
 
 //days and month char for displaing at the top of screen
@@ -1765,7 +1764,7 @@ if(!myTouch.dataAvailable())
     if (currentMillis - prevMillis5sec > 5000)  //if 5 seconds are over update our data
   {   prevMillis5sec=millis();
       GetTemperature();
-      
+      lightCalculator();
       UpdateClockAndLight();
      
       if (dispScreen<1) 
@@ -1775,18 +1774,17 @@ if(!myTouch.dataAvailable())
    }   
 
       
- if (currentMillis - prevMillis1min > 30000)  //every 30 seconds update our data
+ if (currentMillis - prevMillis1min > 60000)  //every 60 seconds update our data
   {   prevMillis1min=millis();
        printDate(now, 5,5);
 
        
        
-       if (currentMillis - prevMillisTouch < (standByMinutes*60000)) 
-        {analogWrite(backlightPIN, 255);
+       if (currentMillis - prevMillisTouch < (standByMinutes*60000)) //wenn die Letzte berührung kleiner als die eingestellten StandbyMinutes
+        {analogWrite(backlightPIN, 255);  //display auf volle Helligkeit
         }
-       else
-         {lightCalculator();
-          AI();
+       else //wenn keine Berührung - AI
+         {AI();
           fertilize(); 
           DateTime CompareScreenOnTime (now.year(), now.month(),now.day(), int(screenOnHour), int(screenOnMinute),0);
           DateTime CompareScreenOffTime (now.year(), now.month(),now.day(), int(screenOffHour), int(screenOffMinute),0);

@@ -126,15 +126,21 @@ void UpdateClockAndLight()
 void processRFInput()
 {switch (mySwitch.getReceivedValue())
  {case f44on:
-  {CleanMode();
-  dispScreen=1;
-  drawScreen();
+  {  light2Value=true;
+        light1Value=true;
+        manualOverride=true;
+        dispScreen=1;
+        drawScreen();        
+        processRelais();
   break;
   }
   case f44off:
-   {cleaningInProcess=false;
-    manualOverride=false;
-    drawScreen();
+   {      manualOverride=false;          
+          dispScreen=0;
+          drawScreen();
+          //processRelais();          
+          lightCalculator();
+          AI();
     break;
    }
   }
@@ -241,7 +247,7 @@ void lightCalculator()
  for (int i=0; i<int(sizeof(lightPWM)/3); i++)
  {DateTime helpDT (now.year(),now.month(),now.day(),int(lightPWM[i].Hour),int(lightPWM[i].Minute),0);
   helpSpan=helpDT-now;
-  if(timeToNextLight.totalseconds()>helpSpan.totalseconds() && int(helpSpan.totalseconds()>0))
+  if(timeToNextLight.totalseconds()>helpSpan.totalseconds() && int(helpSpan.totalseconds()>=0))
   {timeToNextLight=helpSpan;
    newPWM=int(lightPWM[i].pwmValue);
   }
@@ -251,6 +257,8 @@ void lightCalculator()
   }
   }
   calculatedPWM=oldPWM+(int(((oldPWM-newPWM)/((timeToNextLight.totalseconds())+abs(timeSinceLastLight.totalseconds())))*timeSinceLastLight.totalseconds()));
+ 
+
  
    if(calculatedPWM>90)  //over 35% light - coolpump on
    {coolValue=false;}
@@ -341,7 +349,7 @@ void AI()
        }
     else
      {light230Value=true;
-       light1Value=false; 
+       light1Value=true; 
        light2Value=true;
      }
            //turn Heater on or off
