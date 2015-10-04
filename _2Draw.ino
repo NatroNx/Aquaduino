@@ -239,7 +239,7 @@ void drawClockPhPWM()
     {myGLCD.setColor(col_red.r, col_red.g, col_red.b);
      myGLCD.print("CLEANING IN PROGRESS", 5, 545);
     }
-    else if (manualOverride)
+    else if (manualOverride || TVModeState)   //only temporary - lets see tvMode works?!
     {myGLCD.setColor(col_red.r, col_red.g, col_red.b);
      myGLCD.print("MANUAL OVERRIDE     ", 5, 545);
     }

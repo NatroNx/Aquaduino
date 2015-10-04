@@ -4,7 +4,7 @@
 // v.1.3  -  12.09.15 - PWM Dimmung angepasst an MOSFET Steuerung hinter dem Netzteil
 // v.1.3.1 - 25.09.15 - fixed a Bug in LightCalculation (false values when now.minute == nextlight.minute)
 // v.1.3.2 - 04.10.2015 - feed Mode - ScreenUpdate AFTER switching Lights
-
+// v.1.4  -  04.10.2015 - initial TVMode implemented
 
 
 
@@ -73,7 +73,9 @@ byte cleanFilter1Days;
 DateTime cleanFilter2;
 byte cleanFilter2Days;
 
-
+DateTime TVModeStart;
+boolean TVModeState=false;
+byte TVModeBrightness=51; // (20%)
 
 
 int x, y; //touched coordinates
@@ -653,6 +655,7 @@ readScreenScreen();
         {waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
         cleaningInProcess=false;
         manualOverride=false;
+        TVModeState=false;
         pump1Value=false;
         pump2Value=false;
         printDate(now, 5,5);
@@ -806,6 +809,7 @@ readScreenScreen();
         { waitForIt(ResetCord[0], ResetCord[1], ResetCord[2], ResetCord[3]);
           manualOverride=false;
           cleaningInProcess=false;
+          TVModeState=false;
           pump1Value=false;
           pump2Value=false;
           dispScreen=0;
