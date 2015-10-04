@@ -3,7 +3,7 @@
 // v.1.2  -  05.09.15
 // v.1.3  -  12.09.15 - PWM Dimmung angepasst an MOSFET Steuerung hinter dem Netzteil
 // v.1.3.1 - 25.09.15 - fixed a Bug in LightCalculation (false values when now.minute == nextlight.minute)
-
+// v.1.3.2 - 04.10.2015 - feed Mode - ScreenUpdate AFTER switching Lights
 
 
 
@@ -633,9 +633,10 @@ readScreenScreen();
         light2Value=true;
         light1Value=true;
         manualOverride=true;
+        processRelais();
         dispScreen=1;
         drawScreen();        
-        processRelais();
+     
         
         }
         else if (((x>=PowerButtonCoord[0]) && (x<=PowerButtonCoord[2]))  && ((y>=PowerButtonCoord[1]) && (y<=PowerButtonCoord[3]))) // powerbutton
