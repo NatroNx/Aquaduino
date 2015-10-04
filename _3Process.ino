@@ -257,8 +257,9 @@ void lightCalculator()
        }
    else
     {if(timeToNextLight.totalseconds()>helpSpan.totalseconds() && int(helpSpan.totalseconds()>=0) && int(lightPWM[i].pwmValue)<3)   //find the first point with 0 light  (<2)
-      {timeToNextLight=helpSpan;
-       newPWM=int(lightPWM[i].pwmValue);
+      {if(timeToNextLight<helpSpan)
+        {timeToNextLight=helpSpan;}
+       newPWM=0;
       }
     timeSinceLastLight=TVModeStart-now;
     oldPWM=TVModeBrightness;
