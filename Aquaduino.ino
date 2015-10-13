@@ -5,6 +5,8 @@
 // v.1.3.1 - 25.09.15 - fixed a Bug in LightCalculation (false values when now.minute == nextlight.minute)
 // v.1.3.2 - 04.10.2015 - feed Mode - ScreenUpdate AFTER switching Lights
 // v.1.4  -  04.10.2015 - initial TVMode implemented
+// v.1.4.1 - 13.10.2015 - started to implement LightModes for RGB
+
 
 
 
@@ -45,9 +47,7 @@ extern uint8_t OCR_A_Extended_M[];
     alle globale Variablen - teilweise mit Startweten definiert
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int redPin = 11;
-int greenPin = 12;
-int bluePin = 13;
+
 
 unsigned long currentMillis; // get current millis
 unsigned long prevMillisTouch=0;
@@ -160,6 +160,9 @@ byte light1Pin=9;
 byte dPump2Pin=6; 
 byte dPump1Pin=7;
 byte dPump3Pin=5;
+byte redPin = 11;
+byte greenPin = 12;
+byte bluePin = 13;
 
 byte heaterPin=12; //will be RF
 byte coolPin=11; //will be RF
@@ -167,7 +170,6 @@ byte co2Pin=10; //will be RF
 byte pump1Pin=13;  //not used anymore RF now 
 byte pump2Pin=14;  //not used anymore RF now 
 byte light230Pin=15; //not used anymore RF now 
-//true = OFF
 boolean pump1Value=false;
 boolean pump2Value=false;
 boolean light230Value=true;
@@ -272,7 +274,16 @@ record_type lightPWM[12];
 byte lightScreenSet=99;
 
 
-
+typedef struct
+  {
+      byte Hour;
+      byte Minute;
+      byte red;
+      byte green;
+      byte blue;
+  }  recordRGB_type;
+  
+recordRGB_type lightRGB[12];
 
 
 
@@ -505,6 +516,72 @@ lightPWM[11].pwmValue=EEPROM.read(55);
  co2BottleDays=EEPROM.read(103); 
  cleanFilter1Days=EEPROM.read(104); 
  cleanFilter2Days=EEPROM.read(105); 
+screenOnHour=EEPROM.read(106);
+ screenOffHour=EEPROM.read(107);
+ screenOnMinute=EEPROM.read(108);
+ screenOffMinute=EEPROM.read(109);
+ standByMinutes=EEPROM.read(110);
+ backlightPWM=EEPROM.read(111);
+ lightRGB[0].Hour=EEPROM.read(112);
+lightRGB[0].Minute=EEPROM.read(113);
+lightRGB[0].red=EEPROM.read(114);
+lightRGB[0].green=EEPROM.read(115);
+lightRGB[0].blue=EEPROM.read(116);
+lightRGB[1].Hour=EEPROM.read(117);
+lightRGB[1].Minute=EEPROM.read(118);
+lightRGB[1].red=EEPROM.read(119);
+lightRGB[1].green=EEPROM.read(120);
+lightRGB[1].blue=EEPROM.read(121);
+lightRGB[2].Hour=EEPROM.read(122);
+lightRGB[2].Minute=EEPROM.read(123);
+lightRGB[2].red=EEPROM.read(124);
+lightRGB[2].green=EEPROM.read(125);
+lightRGB[2].blue=EEPROM.read(126);
+lightRGB[3].Hour=EEPROM.read(127);
+lightRGB[3].Minute=EEPROM.read(128);
+lightRGB[3].red=EEPROM.read(129);
+lightRGB[3].green=EEPROM.read(130);
+lightRGB[3].blue=EEPROM.read(131);
+lightRGB[4].Hour=EEPROM.read(132);
+lightRGB[4].Minute=EEPROM.read(133);
+lightRGB[4].red=EEPROM.read(134);
+lightRGB[4].green=EEPROM.read(135);
+lightRGB[4].blue=EEPROM.read(136);
+lightRGB[5].Hour=EEPROM.read(137);
+lightRGB[5].Minute=EEPROM.read(138);
+lightRGB[5].red=EEPROM.read(139);
+lightRGB[5].green=EEPROM.read(140);
+lightRGB[5].blue=EEPROM.read(141);
+lightRGB[6].Hour=EEPROM.read(142);
+lightRGB[6].Minute=EEPROM.read(143);
+lightRGB[6].red=EEPROM.read(144);
+lightRGB[6].green=EEPROM.read(145);
+lightRGB[6].blue=EEPROM.read(146);
+lightRGB[7].Hour=EEPROM.read(147);
+lightRGB[7].Minute=EEPROM.read(148);
+lightRGB[7].red=EEPROM.read(149);
+lightRGB[7].green=EEPROM.read(150);
+lightRGB[7].blue=EEPROM.read(151);
+lightRGB[8].Hour=EEPROM.read(152);
+lightRGB[8].Minute=EEPROM.read(153);
+lightRGB[8].red=EEPROM.read(154);
+lightRGB[8].green=EEPROM.read(155);
+lightRGB[8].blue=EEPROM.read(156);
+lightRGB[9].Hour=EEPROM.read(157);
+lightRGB[9].Minute=EEPROM.read(158);
+lightRGB[9].red=EEPROM.read(159);
+lightRGB[9].green=EEPROM.read(160);
+lightRGB[9].blue=EEPROM.read(161);
+lightRGB[10].Hour=EEPROM.read(162);
+lightRGB[10].Minute=EEPROM.read(163);
+lightRGB[10].red=EEPROM.read(164);
+lightRGB[10].green=EEPROM.read(165);
+lightRGB[10].blue=EEPROM.read(166);
+lightRGB[11].Hour=EEPROM.read(167);
+lightRGB[11].Minute=EEPROM.read(168);
+lightRGB[11].red=EEPROM.read(168);
+lightRGB[11].green=EEPROM.read(170);
+lightRGB[11].blue=EEPROM.read(171);
 
 
 
