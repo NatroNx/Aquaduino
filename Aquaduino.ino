@@ -45,7 +45,9 @@ extern uint8_t OCR_A_Extended_M[];
     alle globale Variablen - teilweise mit Startweten definiert
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
+int redPin = 11;
+int greenPin = 12;
+int bluePin = 13;
 
 unsigned long currentMillis; // get current millis
 unsigned long prevMillisTouch=0;
@@ -591,6 +593,9 @@ readScreenScreen();
   myGLCD.setBackColor(0, 0, 0);
  drawScreen(); 
  processPump();
+   analogWrite(redPin, 0);
+  analogWrite(greenPin, 0);
+  analogWrite(bluePin, 0); 
  
  Aquaduino = SD.open("aqua.txt", FILE_WRITE);
  if (Aquaduino)

@@ -128,12 +128,14 @@ void processRFInput()
  {case f44on:
   { TVMode();
     lightCalculator();
+    UpdateClockAndLight();
     AI();
   break;
   }
   case f44off:
    { TVModeState=false;
      lightCalculator();
+     UpdateClockAndLight();
      AI();
     break;
    }
@@ -257,12 +259,20 @@ void lightCalculator()
        }
    else
     {if(timeToNextLight.totalseconds()>helpSpan.totalseconds() && int(helpSpan.totalseconds()>=0) && int(lightPWM[i].pwmValue)<3)   //find the first point with 0 light  (<2)
-      {if(timeToNextLight<helpSpan)
-        {timeToNextLight=helpSpan;}
+      {timeToNextLight=helpSpan;
        newPWM=0;
       }
-    timeSinceLastLight=TVModeStart-now;
-    oldPWM=TVModeBrightness;
+      if(timeSinceLastLight.totalseconds()<helpSpan.totalseconds() && int(helpSpan.totalseconds()<0))
+      {timeSinceLastLight=helpSpan;
+       if (oldPWM<2)
+       {oldPWM=int(lightPWM[i].pwmValue);}
+       else
+       {oldPWM=TVModeBrightness;}
+       
+      timeSinceLastLight=TVModeStart-now;
+    }
+    
+    
     if (calculatedPWM<3)   //disable TVMode once hitting 0
        {TVModeState=false;
        }
