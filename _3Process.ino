@@ -245,7 +245,14 @@ void lightCalculator()
 
   //int helpSpanSeconds;
  for (int i=0; i<int(sizeof(lightPWM)/3); i++)
- {DateTime helpDT (now.year(),now.month(),now.day(),int(lightPWM[i].Hour),int(lightPWM[i].Minute),0);
+ {
+   //RGB
+   DateTime helpRGBDT (now.year(),now.month(),now.day(),int(lightRGB[i].Hour),int(lightRGB[i].Minute),0);
+ 
+   
+   
+  //PWM for white light
+  DateTime helpDT (now.year(),now.month(),now.day(),int(lightPWM[i].Hour),int(lightPWM[i].Minute),0);
   helpSpan=helpDT-now;
    if (!TVModeState)
        {if(timeToNextLight.totalseconds()>helpSpan.totalseconds() && int(helpSpan.totalseconds()>=0))

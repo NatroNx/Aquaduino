@@ -272,6 +272,7 @@ typedef struct
 
 record_type lightPWM[12];
 byte lightScreenSet=99;
+byte RGBScreenSet=99;
 
 
 typedef struct
@@ -342,8 +343,9 @@ const short Co2SetCord[] = {158, 240 ,232, 314};
 const short HeatCord[] = {248, 240 ,322, 314};
 const short DoseCord[] = {338, 240 ,412, 314};
 const short ScreenCord[] = {68, 330 ,142, 404};
-/* more buttons if needed
-const short HeatCord[] = {158, 330 ,232, 404};
+
+const short RGBCord[] = {158, 330 ,232, 404};
+/** more buttons if needed
 const short Co2Cord[] = {248, 330 ,322, 404};
 const short ScreenCord[] = {248, 330 ,322, 404};
 */
@@ -370,6 +372,7 @@ const short powLightOnHourUp[] = {275, 110 ,323  , 158};
 const short powLightOnHourDown[] = {275, 163 ,323, 211};
 const short powLightOnMinuteUp[] = {412, 110 ,460, 158};
 const short powLightOnMinuteDown[] = {412, 163 ,460, 211};
+
 const short powLightOffHourUp[] = {275, 240 ,323  , 288};
 const short powLightOffHourDown[] = {275, 293 ,323, 341};
 const short powLightOffMinuteUp[] = {412, 240 ,460, 288};
@@ -405,6 +408,14 @@ const short ThCord[] = {216, 590 ,264, 638};
 const short FrCord[] = {282, 590 ,330, 638};
 const short SaCord[] = {348, 590 ,396, 638};
 const short SoCord[] = {414, 590 ,462, 638};
+
+//RGBScreen
+const short red1Up[] = {138, 240 ,186  , 288};
+const short red1Down[] = {138, 293 ,186, 341};
+
+const short red2Up[] = {138, 540 ,186  , 588};
+const short red2Down[] = {138, 593 ,186, 641};
+
 
 SdFat SD;
 File Aquaduino;
@@ -595,19 +606,13 @@ lightRGB[11].blue=EEPROM.read(171);
 void setup(){ 
 wdt_enable(WDTO_8S);  //enable watchdog - reload after 8 seconds
  
- //write to file after boot
 
  
 
 
 
 
-//touchscreen
-  myGLCD.InitLCD();
-  myGLCD.clrScr();
-  myGLCD.InitLCD(PORTRAIT);
-  myTouch.InitTouch(PORTRAIT);
-  myTouch.setPrecision(PREC_EXTREME);
+
   file.setSSpin(53);
   file.initFAT(SPISPEED_VERYHIGH);
 
@@ -654,7 +659,12 @@ mySwitch.setRepeatTransmit(15);
   sx1509.pinDir(dPump3Pin, OUTPUT);  // 
   sx1509.pinDir(coolPin, OUTPUT);  // 
   //END I2C
-  
+  //touchscreen
+  myGLCD.InitLCD();
+  myGLCD.clrScr();
+  myGLCD.InitLCD(PORTRAIT);
+  myTouch.InitTouch(PORTRAIT);
+  myTouch.setPrecision(PREC_EXTREME);
     // get Values from EEPROM
  readPowerSchedule();
  readCleanSched();
@@ -662,6 +672,7 @@ mySwitch.setRepeatTransmit(15);
  readTempValue();
  readFerti();
  readLightPWM();  
+ readLightRGB();  
 readScreenScreen();
 
 
@@ -974,6 +985,14 @@ readScreenScreen();
         dispScreen=10;
         drawScreen();
         }
+        else if (((x>=RGBCord[0]) && (x<=RGBCord[2]))  && ((y>=RGBCord[1]) && (y<=RGBCord[3]))) // homebutton
+        {waitForIt(RGBCord[0], RGBCord[1], RGBCord[2], RGBCord[3]);
+        dispScreen=14;
+        drawScreen();
+        }
+        
+        
+    
 
         else if (((x>=BottomButtonCoord[0]) && (x<=BottomButtonCoord[2]))  && ((y>=BottomButtonCoord[1]) && (y<=BottomButtonCoord[3]))) // homebutton
         {waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
@@ -1836,6 +1855,257 @@ readScreenScreen();
         }        
         
         break; 
+      
+      
+ 
+
+        case 14:  // RGBLights
+        if (((x>=BottomButtonCoord[0]) && (x<=BottomButtonCoord[2]))  && ((y>=BottomButtonCoord[1]) && (y<=BottomButtonCoord[3]))) // homebutton
+        {waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
+        dispScreen=0;
+        drawScreen();
+        }
+        else if (((x>=LightMode1Cord[0]) && (x<=LightMode1Cord[2]))  && ((y>=LightMode1Cord[1]) && (y<=LightMode1Cord[3]))) 
+        {waitForIt(LightMode1Cord[0], LightMode1Cord[1], LightMode1Cord[2], LightMode1Cord[3]);
+         dispScreen=141;
+         RGBScreenSet=0;
+         drawScreen();
+        }
+        else if (((x>=LightMode2Cord[0]) && (x<=LightMode2Cord[2]))  && ((y>=LightMode2Cord[1]) && (y<=LightMode2Cord[3]))) 
+        {waitForIt(LightMode2Cord[0], LightMode2Cord[1], LightMode2Cord[2], LightMode2Cord[3]);
+         dispScreen=142;
+         RGBScreenSet=2;
+         drawScreen();
+        }       
+        else if (((x>=LightMode3Cord[0]) && (x<=LightMode3Cord[2]))  && ((y>=LightMode3Cord[1]) && (y<=LightMode3Cord[3]))) 
+        {waitForIt(LightMode3Cord[0], LightMode3Cord[1], LightMode3Cord[2], LightMode3Cord[3]);
+         dispScreen=143;
+         RGBScreenSet=4;
+         drawScreen();
+        } 
+        else if (((x>=LightMode4Cord[0]) && (x<=LightMode4Cord[2]))  && ((y>=LightMode4Cord[1]) && (y<=LightMode4Cord[3]))) 
+        {waitForIt(LightMode4Cord[0], LightMode4Cord[1], LightMode4Cord[2], LightMode4Cord[3]);
+         dispScreen=144;
+         RGBScreenSet=6;
+         drawScreen();
+        } 
+        else if (((x>=LightMode5Cord[0]) && (x<=LightMode5Cord[2]))  && ((y>=LightMode5Cord[1]) && (y<=LightMode5Cord[3]))) 
+        {waitForIt(LightMode5Cord[0], LightMode5Cord[1], LightMode5Cord[2], LightMode5Cord[3]);
+         dispScreen=145;
+         RGBScreenSet=8;
+         drawScreen();
+        } 
+        else if (((x>=LightMode6Cord[0]) && (x<=LightMode6Cord[2]))  && ((y>=LightMode6Cord[1]) && (y<=LightMode6Cord[3]))) 
+        {waitForIt(LightMode6Cord[0], LightMode6Cord[1], LightMode6Cord[2], LightMode6Cord[3]);
+         dispScreen=146;
+         RGBScreenSet=10;
+         drawScreen();
+        } 
+     break; 
+
+     case 141:  //listen on lightscene1
+     case 142:  //listen on lightscene2
+     case 143:  //listen on lightscene3
+     case 144:  //listen on lightscene4
+     case 145:  //listen on lightscene5
+     case 146:  //listen on lightscene6
+ 
+        if (((x>=BottomButtonCoord[0]) && (x<=BottomButtonCoord[2]))  && ((y>=BottomButtonCoord[1]) && (y<=BottomButtonCoord[3]))) // homebutton
+        {waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
+        dispScreen=0;
+        drawScreen();
+        }
+        else if (((x>=powLightOnHourUp[0]) && (x<=powLightOnHourUp[2]))  && ((y>=powLightOnHourUp[1]) && (y<=powLightOnHourUp[3]))) 
+        {waitForIt(powLightOnHourUp[0], powLightOnHourUp[1], powLightOnHourUp[2], powLightOnHourUp[3]);
+        if ((lightRGB[RGBScreenSet].Hour>=23)&&(lightRGB[RGBScreenSet].Hour<=250)){lightRGB[RGBScreenSet].Hour=0;}
+        else {lightRGB[RGBScreenSet].Hour++;}
+         UpdateRGBSceneTOP();
+        }
+        else if (((x>=powLightOnHourDown[0]) && (x<=powLightOnHourDown[2]))  && ((y>=powLightOnHourDown[1]) && (y<=powLightOnHourDown[3]))) 
+        {waitForIt(powLightOnHourDown[0], powLightOnHourDown[1], powLightOnHourDown[2], powLightOnHourDown[3]);
+        lightRGB[RGBScreenSet].Hour--;
+        if (lightRGB[RGBScreenSet].Hour>=230){lightRGB[RGBScreenSet].Hour=23;}
+        UpdateRGBSceneTOP();
+        }
+         else if (((x>=powLightOnMinuteUp[0]) && (x<=powLightOnMinuteUp[2]))  && ((y>=powLightOnMinuteUp[1]) && (y<=powLightOnMinuteUp[3]))) 
+        {waitForIt(powLightOnMinuteUp[0], powLightOnMinuteUp[1], powLightOnMinuteUp[2], powLightOnMinuteUp[3]);
+        if ((lightRGB[RGBScreenSet].Minute>=59)&&(lightRGB[RGBScreenSet].Minute<=250)){lightRGB[RGBScreenSet].Minute=0;}
+        else {lightRGB[RGBScreenSet].Minute++;}
+         UpdateRGBSceneTOP();
+        }
+        else if (((x>=powLightOnMinuteDown[0]) && (x<=powLightOnMinuteDown[2]))  && ((y>=powLightOnMinuteDown[1]) && (y<=powLightOnMinuteDown[3]))) 
+        {waitForIt(powLightOnMinuteDown[0], powLightOnMinuteDown[1], powLightOnMinuteDown[2], powLightOnMinuteDown[3]);
+        lightRGB[RGBScreenSet].Minute--;
+        if (lightRGB[RGBScreenSet].Minute>=230){lightRGB[RGBScreenSet].Minute=59;}
+        UpdateRGBSceneTOP();
+        }
+
+        else if (((x>=red1Up[0]) && (x<=red1Up[2]))  && ((y>=red1Up[1]) && (y<=red1Up[3])))
+        {waitForIt(red1Up[0], red1Up[1], red1Up[2], red1Up[3]);
+         lightRGB[RGBScreenSet].red+=1;
+         UpdateRGBSceneTOP();
+         analogWrite(redPin, lightRGB[RGBScreenSet].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet].blue);
+         
+ 
+        }
+        else if (((x>=red1Down[0]) && (x<=red1Down[2]))  && ((y>=red1Down[1]) && (y<=red1Down[3]))) 
+        {waitForIt(red1Down[0], red1Down[1], red1Down[2], red1Down[3]);
+        lightRGB[RGBScreenSet].red-=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet].blue);
+        UpdateRGBSceneTOP();
+        }
+       
+        
+        else if (((x>=powLightOffHourUp[0]) && (x<=powLightOffHourUp[2]))  && ((y>=powLightOffHourUp[1]) && (y<=powLightOffHourUp[3]))) 
+        {waitForIt(powLightOffHourUp[0], powLightOffHourUp[1], powLightOffHourUp[2], powLightOffHourUp[3]);
+         lightRGB[RGBScreenSet].green+=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet].blue);
+         UpdateRGBSceneTOP();
+        }
+        else if (((x>=powLightOffHourDown[0]) && (x<=powLightOffHourDown[2]))  && ((y>=powLightOffHourDown[1]) && (y<=powLightOffHourDown[3])))
+        {waitForIt(powLightOffHourDown[0], powLightOffHourDown[1], powLightOffHourDown[2], powLightOffHourDown[3]);
+        lightRGB[RGBScreenSet].green-=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet].blue);
+        UpdateRGBSceneTOP();
+        } 
+       
+        else if (((x>=powLightOffMinuteUp[0]) && (x<=powLightOffMinuteUp[2]))  && ((y>=powLightOffMinuteUp[1]) && (y<=powLightOffMinuteUp[3]))) 
+        {waitForIt(powLightOffMinuteUp[0], powLightOffMinuteUp[1], powLightOffMinuteUp[2], powLightOffMinuteUp[3]);
+         lightRGB[RGBScreenSet].blue+=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet].blue);
+         UpdateRGBSceneTOP();
+        }
+        else if (((x>=powLightOffMinuteDown[0]) && (x<=powLightOffMinuteDown[2]))  && ((y>=powLightOffMinuteDown[1]) && (y<=powLightOffMinuteDown[3]))) 
+        {waitForIt(powLightOffMinuteDown[0], powLightOffMinuteDown[1], powLightOffMinuteDown[2], powLightOffMinuteDown[3]);
+        lightRGB[RGBScreenSet].blue-=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet].blue);
+        UpdateRGBSceneTOP();
+        }
+       
+       
+       
+       
+       
+       
+       
+       
+        
+        else if (((x>=powCo2OnHourUp[0]) && (x<=powCo2OnHourUp[2]))  && ((y>=powCo2OnHourUp[1]) && (y<=powCo2OnHourUp[3]))) // homebutton
+        {waitForIt(powCo2OnHourUp[0], powCo2OnHourUp[1], powCo2OnHourUp[2], powCo2OnHourUp[3]);
+        if ((lightRGB[RGBScreenSet+1].Hour>=23)&&(lightRGB[RGBScreenSet+1].Hour<=250)){lightRGB[RGBScreenSet+1].Hour=0;}
+        else {lightRGB[RGBScreenSet+1].Hour++;}
+         UpdateRGBSceneBOT();
+        }
+        else if (((x>=powCo2OnHourDown[0]) && (x<=powCo2OnHourDown[2]))  && ((y>=powCo2OnHourDown[1]) && (y<=powCo2OnHourDown[3]))) // homebutton
+        {waitForIt(powCo2OnHourDown[0], powCo2OnHourDown[1], powCo2OnHourDown[2], powCo2OnHourDown[3]);
+        lightRGB[RGBScreenSet+1].Hour--;
+        if (lightRGB[RGBScreenSet+1].Hour>=230){lightRGB[RGBScreenSet+1].Hour=23;}
+        UpdateRGBSceneBOT();
+        }
+        else if (((x>=powCo2OnMinuteUp[0]) && (x<=powCo2OnMinuteUp[2]))  && ((y>=powCo2OnMinuteUp[1]) && (y<=powCo2OnMinuteUp[3]))) // homebutton
+        {waitForIt(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], powCo2OnMinuteUp[2], powCo2OnMinuteUp[3]);
+        if ((lightRGB[RGBScreenSet+1].Minute>=59)&&(lightRGB[RGBScreenSet+1].Minute<=250)){lightRGB[RGBScreenSet+1].Minute=0;}
+        else {lightRGB[RGBScreenSet+1].Minute++;}
+         UpdateRGBSceneBOT();
+        }
+        else if (((x>=powCo2OnMinuteDown[0]) && (x<=powCo2OnMinuteDown[2]))  && ((y>=powCo2OnMinuteDown[1]) && (y<=powCo2OnMinuteDown[3]))) // homebutton
+        {waitForIt(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], powCo2OnMinuteDown[2], powCo2OnMinuteDown[3]);
+        lightRGB[RGBScreenSet+1].Minute--;
+        if (lightRGB[RGBScreenSet+1].Minute>=230){lightRGB[RGBScreenSet+1].Minute=59;}
+        UpdateRGBSceneBOT();
+        }
+  
+        else if (((x>=red2Up[0]) && (x<=red2Up[2]))  && ((y>=red2Up[1]) && (y<=red2Up[3])))
+        {waitForIt(red2Up[0], red2Up[1], red2Up[2], red2Up[3]);
+         lightRGB[RGBScreenSet+1].red+=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet+1].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet+1].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet+1].blue);
+         UpdateRGBSceneBOT();
+        }
+        else if (((x>=red2Down[0]) && (x<=red2Down[2]))  && ((y>=red2Down[1]) && (y<=red2Down[3]))) 
+        {waitForIt(red2Down[0], red2Down[1], red2Down[2], red2Down[3]);
+        lightRGB[RGBScreenSet+1].red-=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet+1].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet+1].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet+1].blue);
+        UpdateRGBSceneBOT();
+        }
+       
+        
+        else if (((x>=powCo2OffHourUp[0]) && (x<=powCo2OffHourUp[2]))  && ((y>=powCo2OffHourUp[1]) && (y<=powCo2OffHourUp[3]))) 
+        {waitForIt(powCo2OffHourUp[0], powCo2OffHourUp[1], powCo2OffHourUp[2], powCo2OffHourUp[3]);
+         lightRGB[RGBScreenSet+1].green+=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet+1].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet+1].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet+1].blue);
+         UpdateRGBSceneBOT();
+        }
+        else if (((x>=powCo2OffHourDown[0]) && (x<=powCo2OffHourDown[2]))  && ((y>=powCo2OffHourDown[1]) && (y<=powCo2OffHourDown[3])))
+        {waitForIt(powCo2OffHourDown[0], powCo2OffHourDown[1], powCo2OffHourDown[2], powCo2OffHourDown[3]);
+        lightRGB[RGBScreenSet+1].green-=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet+1].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet+1].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet+1].blue);
+        UpdateRGBSceneBOT();
+        } 
+       
+        else if (((x>=powCo2OffMinuteUp[0]) && (x<=powCo2OffMinuteUp[2]))  && ((y>=powCo2OffMinuteUp[1]) && (y<=powCo2OffMinuteUp[3]))) 
+        {waitForIt(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], powCo2OffMinuteUp[2], powCo2OffMinuteUp[3]);
+         lightRGB[RGBScreenSet+1].blue+=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet+1].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet+1].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet+1].blue);
+         UpdateRGBSceneBOT();
+        }
+        else if (((x>=powCo2OffMinuteDown[0]) && (x<=powCo2OffMinuteDown[2]))  && ((y>=powCo2OffMinuteDown[1]) && (y<=powCo2OffMinuteDown[3]))) 
+        {waitForIt(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], powCo2OffMinuteDown[2], powCo2OffMinuteDown[3]);
+        lightRGB[RGBScreenSet+1].blue-=1;
+         analogWrite(redPin, lightRGB[RGBScreenSet+1].red);
+         analogWrite(greenPin, lightRGB[RGBScreenSet+1].green);
+         analogWrite(bluePin, lightRGB[RGBScreenSet+1].blue);
+        UpdateRGBSceneBOT();
+        }
+        
+        
+        
+        
+        
+        
+        else if (((x>=SetPowerSchedCord[0]) && (x<=SetPowerSchedCord[2]))  && ((y>=SetPowerSchedCord[1]) && (y<=SetPowerSchedCord[3]))) // homebutton
+        {waitForIt(SetPowerSchedCord[0], SetPowerSchedCord[1], SetPowerSchedCord[2], SetPowerSchedCord[3]);
+        saveLightRGB();
+        dispScreen=14;
+        drawScreen();        
+        }
+        else if (((x>=CancelPowerSchedCord[0]) && (x<=CancelPowerSchedCord[2]))  && ((y>=CancelPowerSchedCord[1]) && (y<=CancelPowerSchedCord[3]))) // homebutton
+        {waitForIt(CancelPowerSchedCord[0], CancelPowerSchedCord[1], CancelPowerSchedCord[2], CancelPowerSchedCord[3]);
+        readLightRGB();
+        dispScreen=14;
+        drawScreen();        
+        }  
+        break;
+
+
+
+
+    
+        
+      
+      
+      
       
   }
   

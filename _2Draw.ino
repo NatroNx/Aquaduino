@@ -72,6 +72,17 @@ switch (dispScreen)
    case 13:
     ScreenScreen();
     break;
+   case 14:
+    RGBScreen();
+    break;
+    case 141:
+    case 142:   
+    case 143: 
+    case 144:
+    case 145:
+    case 146:
+    RGBScene();
+    break;  
   }
 }
 
@@ -239,9 +250,13 @@ void drawClockPhPWM()
     {myGLCD.setColor(col_red.r, col_red.g, col_red.b);
      myGLCD.print("CLEANING IN PROGRESS", 5, 545);
     }
-    else if (manualOverride || TVModeState)   //only temporary - lets see tvMode works?!
+    else if (manualOverride) 
     {myGLCD.setColor(col_red.r, col_red.g, col_red.b);
      myGLCD.print("MANUAL OVERRIDE     ", 5, 545);
+    }
+    else if (TVModeState) 
+    {myGLCD.setColor(col_red.r, col_red.g, col_red.b);
+     myGLCD.print("TV MODE active         ", 5, 545);
     }
     else
    {myGLCD.print("                     ", 5, 545);
@@ -627,8 +642,11 @@ void LightScene()
       myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48,48, "48up.raw");
    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48,48, "48down.raw");
 
-      myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48,48, "48up.raw");
+
+myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48,48, "48up.raw");
    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48,48, "48down.raw");
+   
+   
         myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48,48, "48up.raw");
    myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48,48, "48down.raw");
       myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48,48, "48up.raw");
@@ -668,7 +686,348 @@ void UpdateLightScene()
 
   
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// 4. RGB
 
+void RGBScreen()
+{  //Statusline TOP
+ 
+   myGLCD.setFont(UbuntuBold);
+   myGLCD.setColor(182,45,255);
+   myGLCD.print("RGB            ", 77,40);
+   myFiles.load(6, 24, 60,60, "60Ligh.raw");
+   myGLCD.setColor(255,255,255);
+   myGLCD.drawLine(66,75,450,75);
+   //end of >TOP
+   
+   myGLCD.setFont(OCR_A_Extended_M);
+   
+    
+
+for (int i=0; i<=5; i++)
+{myGLCD.setColor(255,255,255);
+
+  myGLCD.print("RGB Scene" , 15,140+(i*90)); 
+  myGLCD.printNumI(i+1 , 180,140+(i*90)); 
+  myGLCD.printNumI(lightRGB[i*2].Hour,255,140+(i*90),2,48);
+  myGLCD.print(":",290,140+(i*90));
+  myGLCD.printNumI(lightRGB[i*2].Minute,305,140+(i*90),2,48);
+  myGLCD.print(" - ",340,140+(i*90));
+  myGLCD.print(" - ",218,170+(i*90));
+  myGLCD.print("|", 61,170+(i*90));  //white pipes between RGB values
+  myGLCD.print("|", 403,170+(i*90));
+  myGLCD.print("|", 342,170+(i*90));
+  myGLCD.print("|", 122,170+(i*90));
+  myGLCD.printNumI(lightRGB[i*2+1].Hour,385,140+(i*90),2,48);
+  myGLCD.print(":",420,140+(i*90));
+
+  myGLCD.printNumI(lightRGB[i*2+1].Minute,435,140+(i*90),2,48);
+  if(int(lightRGB[i*2].red)+int(lightRGB[i*2].green)+int(lightRGB[i*2].blue)<60)
+  	{myGLCD.setColor(100,100,100);}
+  	else
+  	{
+  	myGLCD.setColor(lightRGB[i*2].red,lightRGB[i*2].green,lightRGB[i*2].blue);
+  	}
+  myGLCD.printNumI(int(lightRGB[i*2].red) , 15,170+(i*90),3);
+
+  myGLCD.printNumI(int(lightRGB[i*2].green) , 76,170+(i*90),3);
+
+  myGLCD.printNumI(int(lightRGB[i*2].blue) , 137,170+(i*90),3);
+  
+  if(int(lightRGB[i*2+1].red)+int(lightRGB[i*2+1].green)+int(lightRGB[i*2+1].blue)<60)
+  	{myGLCD.setColor(100,100,100);}
+  	else
+  	{
+  	myGLCD.setColor(lightRGB[i*2+1].red,lightRGB[i*2+1].green,lightRGB[i*2+1].blue);
+  	}
+   myGLCD.printNumI(int(lightRGB[i*2+1].red) , 296,170+(i*90),3);
+
+   myGLCD.printNumI(int(lightRGB[i*2+1].green) , 357,170+(i*90),3);
+   
+   myGLCD.printNumI(int(lightRGB[i*2+1].blue) , 418,170+(i*90),3);
+
+}
+
+
+/* OLDSCHOOL   
+   myGLCD.setColor(255,255,255);
+   myGLCD.print("RGB Scene 1" , 15,140);  
+   myGLCD.printNumI(lightRGB[0].Hour,255,140,2,48);
+   myGLCD.print(":",290,140);
+   myGLCD.printNumI(lightRGB[0].Minute,305,140,2,48);
+   myGLCD.print(" - ",340,140);
+   myGLCD.printNumI(lightRGB[1].Hour,385,140,2,48);
+   myGLCD.print(":",420,140);
+   myGLCD.printNumI(lightRGB[1].Minute,435,140,2,48);
+   
+  if(int(lightRGB[0].red)+int(lightRGB[0].green)+int(lightRGB[0].blue)<60)
+  {myGLCD.setColor(100,100,100);}
+  else
+  {
+  myGLCD.setColor(lightRGB[0].red,lightRGB[0].green,lightRGB[0].blue);
+  }
+   myGLCD.printNumI(int(lightRGB[0].red) , 100,170,3);
+   myGLCD.print("|", 146,170);
+   myGLCD.printNumI(int(lightRGB[0].green) , 166,170,3);
+   myGLCD.print("|", 212,170);
+   myGLCD.printNumI(int(lightRGB[0].blue) , 232,170,3);
+   
+   
+  if(int(lightRGB[1].red)+int(lightRGB[1].green)+int(lightRGB[1].blue)<60)
+  {myGLCD.setColor(100,100,100);}
+  else
+  {
+  myGLCD.setColor(lightRGB[1].red,lightRGB[1].green,lightRGB[1].blue);
+  }
+   myGLCD.printNumI(int(lightRGB[1].red) , 290,170,3);
+   myGLCD.print("|", 336,170);
+   myGLCD.printNumI(int(lightRGB[1].green) , 356,170,3);
+   myGLCD.print("|", 402,170);
+   myGLCD.printNumI(int(lightRGB[1].blue) , 422,170,3);
+  
+    
+   myGLCD.setColor(255,255,255);
+   myGLCD.print("RGB Scene 2" , 15,230);  
+   myGLCD.printNumI(lightRGB[2].Hour,255,230,2,48);
+   myGLCD.print(":",290,230);
+   myGLCD.printNumI(lightRGB[2].Minute,305,230,2,48);
+   myGLCD.print(" - ",340,230);
+   myGLCD.printNumI(lightRGB[3].Hour,385,230,2,48);
+   myGLCD.print(":",420,230);
+   myGLCD.printNumI(lightRGB[3].Minute,435,230,2,48);
+
+
+  if(int(lightRGB[2].red)+int(lightRGB[2].green)+int(lightRGB[2].blue)<60)
+  {myGLCD.setColor(100,100,100);}
+  else
+  {
+  myGLCD.setColor(lightRGB[2].red,lightRGB[2].green,lightRGB[2].blue);
+  }
+   myGLCD.printNumI(int(lightRGB[2].red) , 220,260,3);
+   myGLCD.print("|", 266,260);
+   myGLCD.printNumI(int(lightRGB[2].green) , 286,260,3);
+   myGLCD.print("|", 332,260);
+   myGLCD.printNumI(int(lightRGB[2].blue) , 352,260,3);
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   myGLCD.setColor(255,255,255);
+   myGLCD.print("RGB Scene 3" , 15,320);  
+   myGLCD.printNumI(lightRGB[4].Hour,255,320,2,48);
+   myGLCD.print(":",290,320);
+   myGLCD.printNumI(lightRGB[4].Minute,305,320,2,48);
+   myGLCD.print(" - ",340,140);
+   myGLCD.printNumI(lightRGB[5].Hour,385,320,2,48);
+   myGLCD.print(":",420,320);
+   myGLCD.printNumI(lightRGB[5].Minute,435,320,2,48);
+   myGLCD.setColor(182,0,255);
+   myGLCD.printNumI(int(lightRGB[4].pwmValue*100/255) , 274,350,3);
+   myGLCD.print("%", 320,350);
+   myGLCD.printNumI(int(lightRGB[5].pwmValue*100/255) , 404,350,3);
+   myGLCD.print("%", 450,350);
+   
+   myGLCD.setColor(255,255,255);
+   myGLCD.print("RGB Scene 4" , 15,410);  
+   myGLCD.printNumI(lightRGB[6].Hour,255,410,2,48);
+   myGLCD.print(":",290,410);
+   myGLCD.printNumI(lightRGB[6].Minute,305,410,2,48);
+   myGLCD.print(" - ",340,410);
+   myGLCD.printNumI(lightRGB[7].Hour,385,410,2,48);
+   myGLCD.print(":",420,410);
+   myGLCD.printNumI(lightRGB[7].Minute,435,410,2,48);
+   myGLCD.setColor(182,0,255);
+   myGLCD.printNumI(int(lightRGB[6].pwmValue*100/255) , 274,440,3);
+   myGLCD.print("%", 320,440);
+   myGLCD.printNumI(int(lightRGB[7].pwmValue*100/255) , 404,440,3);
+   myGLCD.print("%", 450,440);
+   
+   myGLCD.setColor(255,255,255);
+   myGLCD.print("RGB Scene 5" , 15,500);  
+   myGLCD.printNumI(lightRGB[8].Hour,255,500,2,48);
+   myGLCD.print(":",290,500);
+   myGLCD.printNumI(lightRGB[8].Minute,305,500,2,48);
+   myGLCD.print(" - ",340,500);
+   myGLCD.printNumI(lightRGB[9].Hour,385,500,2,48);
+   myGLCD.print(":",420,500);
+   myGLCD.printNumI(lightRGB[9].Minute,435,500,2,48);
+   myGLCD.setColor(182,0,255);
+   myGLCD.printNumI(int(lightRGB[8].pwmValue*100/255) , 274,530,3);
+   myGLCD.print("%", 320,530);
+   myGLCD.printNumI(int(lightRGB[9].pwmValue*100/255) , 404,530,3);
+   myGLCD.print("%", 450,530);
+   
+      myGLCD.setColor(255,255,255);
+   myGLCD.print("RGB Scene 6" , 15,590);  
+   myGLCD.printNumI(lightRGB[10].Hour,255,590,2,48);
+   myGLCD.print(":",290,590);
+   myGLCD.printNumI(lightRGB[10].Minute,305,590,2,48);
+   myGLCD.print(" - ",340,590);
+   myGLCD.printNumI(lightRGB[11].Hour,385,590,2,48);
+   myGLCD.print(":",420,590);
+   myGLCD.printNumI(lightRGB[11].Minute,435,590,2,48);
+   myGLCD.setColor(182,0,255);
+   myGLCD.printNumI(int(lightRGB[10].pwmValue*100/255) , 274,620,3);
+   myGLCD.print("%", 320,620);
+   myGLCD.printNumI(int(lightRGB[11].pwmValue*100/255) , 404,620,3);
+   myGLCD.print("%", 450,620);
+   
+   
+   
+  /* 
+   myGLCD.print("Light Scene 2  07:20 - 11:50" , 15,230);
+   myGLCD.print(" 90%" , 400,260);
+   myGLCD.print("Light Scene 3  12:00 - 15:50" , 15,320);
+   myGLCD.print("  0%" , 400,350);
+   myGLCD.print("Light Scene 4  12:00 - 15:50" , 15,410);
+   myGLCD.print("100%" , 400,440);
+   myGLCD.print("Light Scene 5  00:00 - 00:00" , 15,500);
+   myGLCD.print("  0%" , 400,530);
+  myGLCD.print("Light Scene 6  00:00 - 00:00" , 15,590);
+   myGLCD.print("  0%" , 400,620);
+   */
+   /*
+  myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw"); 
+  myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw"); 
+  myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw"); 
+  myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw"); 
+  
+  myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Remi.raw"); 
+  myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw"); 
+  myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw"); 
+  myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw"); 
+   
+  */ 
+   //footer starts here
+   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
+   myGLCD.drawLine(30,770,196,770); 
+   myGLCD.drawLine(284,770,450,770); 
+   myFiles.load(216, 746,48,48, "HomeBot.raw"); 
+   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void RGBScene()
+{  //Statusline TOP
+ 
+   myGLCD.setFont(UbuntuBold);
+   myGLCD.setColor(182,0,255);
+   myGLCD.print("RGB SCENE", 77,40);
+   myGLCD.printNumI(dispScreen-140, 360,40);
+   myFiles.load(6, 24, 60,60, "60Ligh.raw");
+   myGLCD.setColor(255,255,255);
+   myGLCD.drawLine(66,75,450,75);
+   //end of >TOP
+   
+    myGLCD.setColor(182,0,255);
+  myGLCD.print("SCENE ON", 20,100);
+  myGLCD.print("RGB", 20,230);
+  myGLCD.print("SCENE OFF", 20,400);
+  myGLCD.print("RGB", 20,530);
+   
+     myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48,48, "48up.raw");
+   myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48,48, "48down.raw");
+      myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48,48, "48up.raw");
+   myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48,48, "48down.raw");
+   
+   
+   myFiles.load(red1Up[0], red1Up[1], 48,48, "48up.raw");  //red 1 up
+   myFiles.load(red1Down[0], red1Down[1], 48,48, "48up.raw"); //red 1 down
+   myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48,48, "48up.raw"); //green 1  up
+   myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48,48, "48down.raw");  //green 1 down
+   myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48,48, "48up.raw"); //blue 1 up
+   myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48,48, "48down.raw");  //blue 1 down
+   
+   
+   myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48,48, "48up.raw");
+   myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48,48, "48down.raw");
+   myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48,48, "48up.raw");
+   myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48,48, "48down.raw");
+ 
+ 
+   myFiles.load(red2Up[0], red2Up[1], 48,48, "48up.raw");  //red 2 up
+   myFiles.load(red2Down[0], red2Down[1], 48,48, "48up.raw"); //red 2 down
+   myFiles.load(powCo2OffHourUp[0], powCo2OffHourUp[1], 48,48, "48up.raw");//green 2  up
+   myFiles.load(powCo2OffHourDown[0], powCo2OffHourDown[1], 48,48, "48down.raw");//green 2 down
+   myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48,48, "48up.raw"); //blue 2 up 
+   myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48,48, "48down.raw"); //blue 2 down
+  
+  
+   myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168,52, "6cancel.raw");
+    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168,52, "6set.raw");
+
+  UpdateRGBSceneTOP();
+    UpdateRGBSceneBOT();
+   //footer starts here
+   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
+   myGLCD.drawLine(30,770,196,770); 
+   myGLCD.drawLine(284,770,450,770); 
+   myFiles.load(216, 746,48,48, "HomeBot.raw"); 
+   
+}
+
+
+void UpdateRGBSceneTOP()
+{ myGLCD.setFont(UbuntuBold);
+   
+
+  myGLCD.setColor(255,255,255);
+  myGLCD.printNumI(lightRGB[RGBScreenSet].Hour, 220,145,2,48);
+  myGLCD.printNumI(lightRGB[RGBScreenSet].Minute, 360,145,2,48);
+  if(int(lightRGB[RGBScreenSet].red)+int(lightRGB[RGBScreenSet].green)+int(lightRGB[RGBScreenSet].blue)<60)
+  {myGLCD.setColor(100,100,100);}
+  else
+  {
+  myGLCD.setColor(lightRGB[RGBScreenSet].red,lightRGB[RGBScreenSet].green,lightRGB[RGBScreenSet].blue);
+  }
+    myGLCD.printNumI(int(lightRGB[RGBScreenSet].red), 49,275,3);
+  myGLCD.printNumI(int(lightRGB[RGBScreenSet].green), 192,275,3);
+  myGLCD.printNumI(int(lightRGB[RGBScreenSet].blue), 335,275,3);
+
+  
+}
+
+
+void UpdateRGBSceneBOT()
+{ myGLCD.setFont(UbuntuBold);
+   
+myGLCD.setColor(255,255,255);
+  myGLCD.printNumI(lightRGB[RGBScreenSet+1].Hour, 220,445,2,48);
+  myGLCD.printNumI(lightRGB[RGBScreenSet+1].Minute, 360,445,2,48);
+  
+    if(int(lightRGB[RGBScreenSet+1].red)+int(lightRGB[RGBScreenSet+1].green)+int(lightRGB[RGBScreenSet+1].blue)<60)
+  {myGLCD.setColor(100,100,100);}
+  else
+  {myGLCD.setColor(lightRGB[RGBScreenSet+1].red,lightRGB[RGBScreenSet+1].green,lightRGB[RGBScreenSet+1].blue);
+  }
+    myGLCD.printNumI(int(lightRGB[RGBScreenSet+1].red), 49,575,3);
+  myGLCD.printNumI(int(lightRGB[RGBScreenSet+1].green), 192,575,3);
+  myGLCD.printNumI(int(lightRGB[RGBScreenSet+1].blue), 335,575,3);
+
+  
+}
 
 
 
