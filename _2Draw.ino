@@ -467,6 +467,8 @@ void SettingsScreen()
     myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw");
     myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw");   
     myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Scree.raw");   
+    myFiles.load(RGBCord[0], RGBCord[1],74,74, "74RGB.raw");       
+
       
     //footer starts here
      myGLCD.setColor(col_white.r, col_white.g, col_white.b);
@@ -687,15 +689,15 @@ void UpdateLightScene()
   
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 4. RGB
+// 14. RGB
 
 void RGBScreen()
 {  //Statusline TOP
  
    myGLCD.setFont(UbuntuBold);
-   myGLCD.setColor(182,45,255);
+   myGLCD.setColor(0,255,132);
    myGLCD.print("RGB            ", 77,40);
-   myFiles.load(6, 24, 60,60, "60Ligh.raw");
+   myFiles.load(6, 24, 60,60, "60RGB.raw");
    myGLCD.setColor(255,255,255);
    myGLCD.drawLine(66,75,450,75);
    //end of >TOP
@@ -933,7 +935,7 @@ void RGBScene()
 {  //Statusline TOP
  
    myGLCD.setFont(UbuntuBold);
-   myGLCD.setColor(182,0,255);
+   myGLCD.setColor(0,255,132);
    myGLCD.print("RGB SCENE", 77,40);
    myGLCD.printNumI(dispScreen-140, 360,40);
    myFiles.load(6, 24, 60,60, "60Ligh.raw");

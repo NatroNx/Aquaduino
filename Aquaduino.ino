@@ -6,6 +6,8 @@
 // v.1.3.2 - 04.10.2015 - feed Mode - ScreenUpdate AFTER switching Lights
 // v.1.4  -  04.10.2015 - initial TVMode implemented
 // v.1.4.1 - 13.10.2015 - started to implement LightModes for RGB
+// v.1.4.2 - 17.10.2015 - RGB visualisation ready
+// v.1.4.3 - 18.10.2015 - RGB finalized
 
 
 
@@ -200,10 +202,17 @@ byte cleanMinutes=120;
 
 TimeSpan timeSinceLastLight;
 TimeSpan timeToNextLight;
+TimeSpan timeSinceLastLightRGB;
+TimeSpan timeToNextLightRGB;
 byte currentPWM=0; //0 - which is NO light
 byte nextPWM=0;
+
+
 byte lightPwmPin=9;              //the pin used for pwm
 float calculatedPWM=0;          //the value
+float calculatedRed=0;
+float calculatedGreen=0;
+float calculatedBlue=0;
 const byte backlightPIN=44;      // Pin 44 used for backlight  
 
 
@@ -343,8 +352,9 @@ const short Co2SetCord[] = {158, 240 ,232, 314};
 const short HeatCord[] = {248, 240 ,322, 314};
 const short DoseCord[] = {338, 240 ,412, 314};
 const short ScreenCord[] = {68, 330 ,142, 404};
-
 const short RGBCord[] = {158, 330 ,232, 404};
+
+
 /** more buttons if needed
 const short Co2Cord[] = {248, 330 ,322, 404};
 const short ScreenCord[] = {248, 330 ,322, 404};
@@ -728,8 +738,12 @@ readScreenScreen();
         light2Value=true;
         light1Value=true;
         manualOverride=true;
+        analogWrite(redPin, 0);
+        analogWrite(greenPin, 0);
+        analogWrite(bluePin, 0);
         processRelais();
         dispScreen=1;
+
         drawScreen();        
      
         

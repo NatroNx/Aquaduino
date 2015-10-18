@@ -119,6 +119,12 @@ void UpdateClockAndLight()
     now = rtc.now();
     //calculatedPWM=calculatedPWM+255;
     analogWrite(lightPwmPin, calculatedPWM);
+    if(dispScreen!=141&&dispScreen!=142&&dispScreen!=143&&dispScreen!=144&&dispScreen!=145&&dispScreen!=146)  
+   { 
+    analogWrite(redPin, calculatedRed);
+    analogWrite(greenPin, calculatedGreen);
+    analogWrite(bluePin, calculatedBlue); 
+   }
  }
  
 
@@ -241,19 +247,47 @@ void lightCalculator()
  timeToNextLight = now.unixtime() - (now.unixtime()-86400*7);  //set it to 7 days as fallback
  float oldPWM=255;
  float newPWM=255;
+ 
+ //for RGB
+ TimeSpan helpSpanRGB  = now.unixtime() - (now.unixtime()-86400*7);  //set it to 7 days as fallback
+ timeSinceLastLightRGB  = now.unixtime() - (now.unixtime()+86400*7);  //set it to -7 days as fallback
+ timeToNextLightRGB = now.unixtime() - (now.unixtime()-86400*7);  //set it to 7 days as fallback
+ float oldRed=0;
+ float newRed=0;
+ float oldBlue=0;
+ float newBlue=0;
+ float oldGreen=0;
+ float newGreen=0;
 
 
   //int helpSpanSeconds;
- for (int i=0; i<int(sizeof(lightPWM)/3); i++)
- {
-   //RGB
-   DateTime helpRGBDT (now.year(),now.month(),now.day(),int(lightRGB[i].Hour),int(lightRGB[i].Minute),0);
- 
+ for (int i=0; i<12; i++)
+ {DateTime helpDTRGB (now.year(),now.month(),now.day(),int(lightRGB[i].Hour),int(lightRGB[i].Minute),0);
+  helpSpanRGB=helpDTRGB-now;
+  DateTime helpDT (now.year(),now.month(),now.day(),int(lightPWM[i].Hour),int(lightPWM[i].Minute),0);
+  helpSpan=helpDT-now;
+   
+   //RGB 
+
+       if(timeToNextLightRGB.totalseconds()>helpSpanRGB.totalseconds() && int(helpSpanRGB.totalseconds()>=0))
+            {timeToNextLightRGB=helpSpanRGB;
+             newRed=int(lightRGB[i].red);
+             newGreen=int(lightRGB[i].green);
+             newBlue=int(lightRGB[i].blue);
+            }
+        if(timeSinceLastLightRGB.totalseconds()<helpSpanRGB.totalseconds() && int(helpSpanRGB.totalseconds()<0))
+            {timeSinceLastLightRGB=helpSpanRGB;
+             oldRed=int(lightRGB[i].red);
+             oldGreen=int(lightRGB[i].green);
+             oldBlue=int(lightRGB[i].blue);
+            }
+       
+    
+
    
    
   //PWM for white light
-  DateTime helpDT (now.year(),now.month(),now.day(),int(lightPWM[i].Hour),int(lightPWM[i].Minute),0);
-  helpSpan=helpDT-now;
+
    if (!TVModeState)
        {if(timeToNextLight.totalseconds()>helpSpan.totalseconds() && int(helpSpan.totalseconds()>=0))
             {timeToNextLight=helpSpan;
@@ -285,22 +319,24 @@ void lightCalculator()
        }
     }
  
-
-
-  calculatedPWM=oldPWM+(int(((oldPWM-newPWM)/((timeToNextLight.totalseconds())+abs(timeSinceLastLight.totalseconds())))*timeSinceLastLight.totalseconds()));
+//RGB
+calculatedRed=oldRed+(int(((oldRed-newRed)/((timeToNextLightRGB.totalseconds())+abs(timeSinceLastLightRGB.totalseconds())))*timeSinceLastLightRGB.totalseconds()));
+calculatedGreen=oldGreen+(int(((oldGreen-newGreen)/((timeToNextLightRGB.totalseconds())+abs(timeSinceLastLightRGB.totalseconds())))*timeSinceLastLightRGB.totalseconds()));
+calculatedBlue=oldBlue+(int(((oldBlue-newBlue)/((timeToNextLightRGB.totalseconds())+abs(timeSinceLastLightRGB.totalseconds())))*timeSinceLastLightRGB.totalseconds()));
+  //white
+calculatedPWM=oldPWM+(int(((oldPWM-newPWM)/((timeToNextLight.totalseconds())+abs(timeSinceLastLight.totalseconds())))*timeSinceLastLight.totalseconds()));
  
    if(calculatedPWM>90)  //over 35% light - coolpump on
    {coolValue=false;}
    else
    {coolValue=true;}   
- }
-}
 
 
 
+/*
 
-
-/*  Serial.print(i);
+Serial.print("i = ");
+ Serial.print(i);
   Serial.print("   ");
   Serial.print(helpSpan.days(), DEC);
   Serial.print("d    ");
@@ -330,12 +366,8 @@ Serial.print(timeSinceLastLight.hours(), DEC);
   Serial.print("calculated PWM:    ");
   Serial.println(calculatedPWM);
  
- */
-  /*helpSpanSeconds=abs(int(helpSpan.totalseconds()));
-  if((helpSpanSeconds < timeToNextLight.totalseconds()) && (int(helpSpan.totalseconds()>0)))
-   {timeToNextLight=helpSpan;
-    currentPWM=lightPWM[i].pwmValue;
-    }
+ 
+  
     Serial.println(i);
     Serial.print(timeToNextLight.days(), DEC);
     Serial.print(' ');
@@ -343,9 +375,15 @@ Serial.print(timeSinceLastLight.hours(), DEC);
     Serial.print(':');
     Serial.println(timeToNextLight.minutes(), DEC);
     Serial.println(currentPWM);
-   
-*/
-
+  */ 
+ }
+}
+else  //if manualoverride is active - turn off the RGB light
+{
+calculatedRed=0;
+calculatedGreen=0;
+calculatedBlue=0;
+}
 
 }
 /*
@@ -578,111 +616,6 @@ void fertilize()
      }
    }
  }
-
-/*
-void Testcalculation()
-{byte Lightmodes[]={20,00,21,10,23,10,22,30,22,53};
- DateTime dt99 (now.unixtime()-86400*7);
- TimeSpan ts1;
- TimeSpan shortestTime=now-dt99;
-  DateTime zwischenzeit;
-
- for (int i=0; i<sizeof(Lightmodes); i+=2)
- {DateTime zwischenzeit (now.year(),now.month(),now.day(),int(Lightmodes[i]),int(Lightmodes[i+1]),0);
-Serial.print("ZWISCHENZEIT:");
-Serial.print(zwischenzeit.year(), DEC);
-    Serial.print('/');
-    Serial.print(zwischenzeit.month(), DEC);
-    Serial.print('/');
-    Serial.print(zwischenzeit.day(), DEC);
-    Serial.print(' ');
-    Serial.print(zwischenzeit.hour(), DEC);
-    Serial.print(':');
-    Serial.print(zwischenzeit.minute(), DEC);
-    Serial.print(':');
-    Serial.print(zwischenzeit.second(), DEC);
-    Serial.println();
-    
-    
-  ts1=zwischenzeit-now;
-  if((ts1.totalseconds() < shortestTime.totalseconds()) && (int(ts1.totalseconds())>0))
-   {shortestTime=ts1;
-    Serial.print("Next Time:");
-    Serial.print(int(Lightmodes[i]));
-    Serial.print(":");
-     Serial.println(int(Lightmodes[i+1]));
-}
- }
-  
- 
- 
-   Serial.print(now.year(), DEC);
-    Serial.print('/');
-    Serial.print(now.month(), DEC);
-    Serial.print('/');
-    Serial.print(now.day(), DEC);
-    Serial.print(' ');
-    Serial.print(now.hour(), DEC);
-    Serial.print(':');
-    Serial.print(now.minute(), DEC);
-    Serial.print(':');
-    Serial.print(now.second(), DEC);
-    Serial.println();
-    
-    
- /*       Serial.print(zwischenzeit.year(), DEC);
-    Serial.print('/');
-    Serial.print(zwischenzeit.month(), DEC);
-    Serial.print('/');
-    Serial.print(zwischenzeit.day(), DEC);
-    Serial.print(' ');
-    Serial.print(zwischenzeit.hour(), DEC);
-    Serial.print(':');
-    Serial.print(zwischenzeit.minute(), DEC);
-    Serial.print(':');
-    Serial.print(zwischenzeit.second(), DEC);
-    Serial.println();
-
-    Serial.print("days  ");
-    Serial.print(shortestTime.days(), DEC);
-    Serial.print("hours   ");
-    Serial.print(shortestTime.hours(), DEC);
-    Serial.print("h");
-    Serial.print(shortestTime.minutes(), DEC);
-    Serial.print("m");
-    Serial.println(shortestTime.seconds(), DEC);
-        Serial.println("s");
-     
-    Serial.print(shortestTime.totalseconds(), DEC);
-   // Serial.print(ts1);
-   
-   
-    Serial.println();
-    Serial.println();
-    Serial.println();
-    
-    
-   */ 
-
-  
- 
-   /* for (i=0; i<9; i++)
-  {zwischenzeit
-  }
-  
-
-
- 
-powLightOnHour;
-powLightOnMinute;
-powLightOffHour;
-powLightOffMinute;
-
-powCo2OnHour;
-powCo2OnMinute;
-powCo2OffHour;
-powCo2OffMinute;
- */
 
   
   
