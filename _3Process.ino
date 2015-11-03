@@ -58,19 +58,19 @@ f23on //Coolpump ON
 
 
 void processPump() //2 times cause sometimes it doesnt switch
-{ delay(100);
+{ //delay(100);
 if (!pump1Value){mySwitch.send(f11on, 24);}
  else {mySwitch.send(f11off, 24);}
  delay(100);
  if (!pump2Value){mySwitch.send(f42on, 24);}
  else {mySwitch.send(f42off, 24);}
  
-  delay(100);
-if (!pump1Value){mySwitch.send(f11on, 24);}
- else {mySwitch.send(f11off, 24);}
- delay(100);
- if (!pump2Value){mySwitch.send(f42on, 24);}
- else {mySwitch.send(f42off, 24);}
+//  delay(100);
+//if (!pump1Value){mySwitch.send(f11on, 24);}
+ //else {mySwitch.send(f11off, 24);}
+ //delay(100);
+ //if (!pump2Value){mySwitch.send(f42on, 24);}
+ //else {mySwitch.send(f42off, 24);}
  
 }
 
@@ -428,10 +428,10 @@ void AI()
    
      //turn  Co2 on or off
      if (now.unixtime() >CompareCO2OnTime.unixtime() && now.unixtime() <CompareCO2OffTime.unixtime())
-      {if(PhWert>PHUpperLimit)
+      {if(PhWert>=PHUpperLimit)
           {co2Value=false;
           }
-        else if (PhWert<PHLowerLimit)
+        else if (PhWert<=PHLowerLimit)
           {co2Value=true;
           } 
       }
