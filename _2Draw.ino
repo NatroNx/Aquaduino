@@ -160,16 +160,14 @@ void HomeScreen()
   //icons - switchin with state
 
 
-  
-  myGLCD.drawLine(30, 173, 450, 173); //for testing
 
-
-  
   updateHomeScreen();
+  drawCurve();
+  myGLCD.setColor(255, 255, 255);
   // lightmode
   myFiles.load(LightUp[0], LightUp[1], 48, 48, "48up.raw");
   myFiles.load(LightDown[0], LightDown[1], 48, 48, "48down.raw");
- // myFiles.load(90, 85, 120, 102, "1therm.raw");
+  // myFiles.load(90, 85, 120, 102, "1therm.raw");
   //draw the fertilizer
   myGLCD.drawLine(30, 570, 450, 570); //3rd line
   myFiles.load(21, 615, 438, 96, "DockNew.raw");
@@ -189,6 +187,35 @@ void HomeScreen()
 
 
 }
+
+
+void drawCurve()
+{ myGLCD.setColor(0, 0, 0);
+  myGLCD.fillRect(280, 195, 450, 269);
+  myGLCD.setColor(255, 255, 255);
+  myGLCD.drawLine(280, 222, 450, 222);
+  myGLCD.drawLine(280, 192, 295, 192);
+  myGLCD.drawLine(280, 252, 295, 252);
+
+  for (int i = 0; i < 95; i++)
+  { int firstIndex = (i + put_index) % 96;
+    int secondIndex = (i + put_index + 1) % 96;
+
+
+    if (Co2Values[firstIndex])
+    { myGLCD.setColor(255, 0, 0);
+    }
+    else
+    { myGLCD.setColor(0, 255, 0);
+    }
+    //lower Border = PHLower Limit   | upper Border = PhLowerLimit
+    myGLCD.drawLine(280 + 1.77 * i, 222 + ((7 - PHValues[firstIndex]) / ((PHUpperLimit + 0.1 - PHLowerLimit - 0.1) / 2) * 30), 280 + 1.77 * (i + 1), 222 + ((7 - PHValues[secondIndex]) / ((PHUpperLimit + 0.1 - PHLowerLimit - 0.1) / 2) * 30));
+  }
+
+}
+
+//PHUpperLimit+0.1-PHLowerLimit-0.1
+// scale = PHUpperLimit +0.1 - PHLowerLimit - 0.1
 
 void updateHomeScreen()
 { wdt_reset();
@@ -256,7 +283,7 @@ void updateHomeScreen()
   }
 }
 
-void drawFertilizer()  //methode zur Berechnung der Düngermenge sowie Darstellung der Düngerreserve
+void drawFertilizer()  //methode zur Berechnung der DÃ¼ngermenge sowie Darstellung der DÃ¼ngerreserve
 { if (dispScreen < 1)
   { myGLCD.setFont(BigFont);
     myFiles.load(166, 370, 46, 130, "1ferts.raw");
@@ -281,22 +308,22 @@ void drawFertilizer()  //methode zur Berechnung der Düngermenge sowie Darstellu
 
 void drawClockPhPWM()
 {
-  if (Temp >= 28)
+  if (Temp >= TempUpperLimit)
   {
-    myFiles.load(90, 85, 105, 90, "1thermR.raw");
+    myFiles.load(26, 85, 105, 90, "1thermR.raw");
   }
   else
   {
-    myFiles.load(90, 85, 105, 90, "1therm.raw");
+    myFiles.load(26, 85, 105, 90, "1therm.raw");
   }
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.setFont(SevenSegmentFull);
-  myGLCD.print("o", 410, 90);              // Degree icon
-  myGLCD.printNumF(Temp, 2, 245, 115);
+  myGLCD.print("o", 310, 90);              // Degree icon
+  myGLCD.printNumF(Temp, 2, 145, 115); //245
   myGLCD.setColor(0, 255, 0);
-  myGLCD.print("PH:  ", 104, 210);
+  myGLCD.print("PH:  ", 40, 210);
   myGLCD.setColor(255, 255, 255);
-  myGLCD.printNumF(PhWert, 2, 275, 210);
+  myGLCD.printNumF(PhWert, 2, 135, 210);
   myGLCD.setFont(BigFont);
   if (cleaningInProcess)
   { myGLCD.setColor(col_red.r, col_red.g, col_red.b);
@@ -1874,7 +1901,7 @@ void TestScreen()
     myGLCD.setBackColor (0, 0, 0);
   */ //Ende Button 1
 
-  /*temporär Werte anzeige
+  /*temporÃ¤r Werte anzeige
    myGLCD.setColor(0, 0, 0); //to delete the pwm field every update
    myGLCD.fillRect(330,370,375,390); //to delete the pwm field every Update
    myGLCD.setColor(255, 255, 255);
@@ -1939,4 +1966,5 @@ void actOnRealease(int x1, int y1, int x2, int y2)    // Draw a red frame while 
   drawScreen();
 
 }
+
 

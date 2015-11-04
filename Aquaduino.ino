@@ -8,6 +8,7 @@
 // v.1.4.1 - 13.10.2015 - started to implement LightModes for RGB
 // v.1.4.2 - 17.10.2015 - RGB visualisation ready
 // v.1.4.3 - 18.10.2015 - RGB finalized
+// v.1.5   - 04.11.2015 - added PH Curve
 
 
 
@@ -87,13 +88,19 @@ int x2, y2;
 String inputstring = "";                                                       //a string to hold incoming data from the PC
 String PhWertString = "";  //a string to hold the data from the Atlas Scientific product
 
-float PhWert = 1.11; //sting to float to calculate with it
+float PhWert = 7.01; //sting to float to calculate with it
 float PHUpperLimit = 10;
 float PHLowerLimit = 5;
-float PHValues[96]={7.1,7.04, 6.78, 6.9,  7.09, 6.77, 6.85, 6.56, 6.77, 6.76, 7.09, 7.24, 6.64, 6.67, 6.98, 7.31, 6.83, 7.39, 7.07, 6.61, 7.32, 6.98, 6.7,  6.56, 7.02, 6.94, 6.91, 6.68, 7.12, 6.71, 6.89, 7.11, 7.42, 7.41, 7.05, 7.46, 7.42, 6.96, 7.05, 7.36, 7.44, 7.01, 7.26, 6.53, 6.87, 7.12, 7.41, 7.47, 7.02, 7.25, 6.59, 7.16, 6.52, 7.18, 7.3,  6.87, 6.57, 6.67, 7.49, 6.63, 7.18, 7.15, 6.59, 6.75, 6.72, 6.87, 6.61, 6.99, 7.34, 6.9,  6.59, 7.4,  6.5,  6.99, 7.02, 7.48, 6.58, 6.99, 7.12, 6.95, 7.2,  7.49, 7.09, 6.95, 6.67, 7.19, 7.01, 7.28, 7.21, 7.32, 6.99, 6.71, 7.27, 7.47, 7.17, 6.56
-};
-int Co2Values[96]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0};
+float PHValues[96];
 
+boolean Co2Values[96];
+
+
+
+
+
+byte put_index = 0;
+byte get_index = 1;
 /**<datatype> array [DIM_0_SIZE] [DIM_1_SIZE] = {
   //as many vals as dim1
  {val,val,val},
@@ -633,8 +640,15 @@ void setup() {
   SD.begin(53);
   pinMode(44, OUTPUT);
   analogWrite(backlightPIN, 255);
-
-
+  //reset Co2Values
+  for (int i = 0; i < 96; i++)
+  {
+    Co2Values[i] = 1;
+  }
+  for (int i = 0; i < 96; i++)
+  {
+    PHValues[i] = 7.0;
+  }
 
 
 
@@ -732,7 +746,7 @@ void loop() {
 
 
       switch (dispScreen)
-      { // Caputre Buttons @ HomeScreen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      { // Caputre Buttons @ F ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         case 0:  // home screen
           if (((x >= HomeButtonCoord[0]) && (x <= HomeButtonCoord[2]))  && ((y >= HomeButtonCoord[1]) && (y <= HomeButtonCoord[3]))) // homebutton
           { waitForIt(HomeButtonCoord[0], HomeButtonCoord[1], HomeButtonCoord[2], HomeButtonCoord[3]);
@@ -2307,8 +2321,11 @@ void loop() {
       lightCalculator();
       UpdateClockAndLight();
 
+
+
       if (dispScreen < 1)
       { drawClockPhPWM();
+        drawCurve();
       }
 
     }
@@ -2320,10 +2337,10 @@ void loop() {
 
 
 
-      if (currentMillis - prevMillisTouch < (standByMinutes * 60000)) //wenn die Letzte berührung kleiner als die eingestellten StandbyMinutes
+      if (currentMillis - prevMillisTouch < (standByMinutes * 60000)) //wenn die Letzte berÃ¼hrung kleiner als die eingestellten StandbyMinutes
       { analogWrite(backlightPIN, 255);  //display auf volle Helligkeit
       }
-      else //wenn keine Berührung - AI
+      else //wenn keine BerÃ¼hrung - AI
       { AI();
         fertilize();
         DateTime CompareScreenOnTime (now.year(), now.month(), now.day(), int(screenOnHour), int(screenOnMinute), 0);
@@ -2346,6 +2363,7 @@ void loop() {
 
     if (currentMillis - prevMillis15min > 900000)  //every 15 minutes write to file
     { prevMillis15min = millis();
+      writePHtoRingBuffer();
       writeFile();
     }
 
@@ -2357,5 +2375,6 @@ void loop() {
     }
   }
 }
+
 
 
