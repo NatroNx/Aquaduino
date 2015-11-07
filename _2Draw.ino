@@ -11,9 +11,11 @@ void drawScreen()
   printDate(now, 5, 5);
   switch (dispScreen)
   { case 0:  // home screen
+      HomeScreen();
       drawClockPhPWM();
       drawFertilizer();
-      HomeScreen();
+      printDate(now, 5, 5);
+
 
       break;
     case 1:  // clean screen
@@ -148,7 +150,8 @@ void printDate(DateTime printnow, int tx, int ty)
 // 0. draw Homescreen
 void HomeScreen()
 { //Statusline TOP
-
+  myGLCD.clrScr();
+  drawCurve();
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(36, 0, 255);
   myGLCD.print("HOME       ", 77, 40);
@@ -162,7 +165,7 @@ void HomeScreen()
 
 
   updateHomeScreen();
-  drawCurve();
+
   myGLCD.setColor(255, 255, 255);
   // lightmode
   myFiles.load(LightUp[0], LightUp[1], 48, 48, "48up.raw");
@@ -178,6 +181,7 @@ void HomeScreen()
   myGLCD.print("Setting", 357, 720);
 
 
+
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
@@ -190,16 +194,55 @@ void HomeScreen()
 
 
 void drawCurve()
-{ myGLCD.setColor(0, 0, 0);
-  myGLCD.fillRect(280, 195, 450, 269);
+{ 
   myGLCD.setColor(255, 255, 255);
-  myGLCD.drawLine(280, 222, 450, 222);
-  myGLCD.drawLine(280, 192, 295, 192);
-  myGLCD.drawLine(280, 252, 295, 252);
+
+
+ 
+  myGLCD.drawLine(340, 116, 450, 116);  //midline  
+  myGLCD.drawLine(407, 113, 407, 119);  //scalline
+  myGLCD.drawLine(364, 113, 364, 119); //scalline
+
+
+   myGLCD.setColor(80, 70, 80);
+  myGLCD.drawLine(340, 83, 450, 83); //grey limitlines 
+  myGLCD.drawLine(340, 164, 450, 164);  //grey limitlines
+  
+
+    myGLCD.setColor(0, 0, 255);
+  for (int i = 0; i < 61; i++)
+  { int firstIndex = (i +  put_TempIndex) % 62;
+    int secondIndex = (i +  put_TempIndex + 1) % 62;
+
+
+
+    //lower Border = PHLower Limit   | upper Border = PhLowerLimit
+    myGLCD.drawLine(340 + 1.77 * i, 116 + ((26 - TempValues[firstIndex]) / ((TempUpperLimit - TempLowerLimit) / 2) * 40), 340 + 1.77 * (i + 1), 116 + ((26 - TempValues[secondIndex]) / ((TempUpperLimit - TempLowerLimit) / 2) * 40));
+  }
+ 
+
+
+
+
+
+
+  
+  //PH~~~~~~~~~~~~
+  myGLCD.setColor(255, 255, 255);
+  myGLCD.drawLine(280, 222, 450, 222);  //midline  
+  myGLCD.drawLine(407, 219, 407, 225);  //scalline
+  myGLCD.drawLine(364, 219, 364, 225); //scalline
+  myGLCD.drawLine(321, 219, 321, 225); //scalline
+  
+  myGLCD.setColor(80, 70, 80);
+  myGLCD.drawLine(280, 182, 450, 182);  //grey limitlines
+  myGLCD.drawLine(280, 262, 450, 262); //grey limitlines
+
+
 
   for (int i = 0; i < 95; i++)
-  { int firstIndex = (i + put_index) % 96;
-    int secondIndex = (i + put_index + 1) % 96;
+  { int firstIndex = (i +  put_PHindex) % 96;
+    int secondIndex = (i +  put_PHindex + 1) % 96;
 
 
     if (Co2Values[firstIndex])
@@ -209,7 +252,7 @@ void drawCurve()
     { myGLCD.setColor(0, 255, 0);
     }
     //lower Border = PHLower Limit   | upper Border = PhLowerLimit
-    myGLCD.drawLine(280 + 1.77 * i, 222 + ((7 - PHValues[firstIndex]) / ((PHUpperLimit + 0.1 - PHLowerLimit - 0.1) / 2) * 30), 280 + 1.77 * (i + 1), 222 + ((7 - PHValues[secondIndex]) / ((PHUpperLimit + 0.1 - PHLowerLimit - 0.1) / 2) * 30));
+    myGLCD.drawLine(280 + 1.77 * i, 222 + ((7 - PHValues[firstIndex]) / ((PHUpperLimit - PHLowerLimit) / 2) * 40), 280 + 1.77 * (i + 1), 222 + ((7 - PHValues[secondIndex]) / ((PHUpperLimit - PHLowerLimit) / 2) * 40));
   }
 
 }
@@ -318,8 +361,8 @@ void drawClockPhPWM()
   }
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.setFont(SevenSegmentFull);
-  myGLCD.print("o", 310, 90);              // Degree icon
-  myGLCD.printNumF(Temp, 2, 145, 115); //245
+  myGLCD.print("o", 300, 80);              // Degree icon
+  myGLCD.printNumF(Temp, 2, 135, 95); //245
   myGLCD.setColor(0, 255, 0);
   myGLCD.print("PH:  ", 40, 210);
   myGLCD.setColor(255, 255, 255);

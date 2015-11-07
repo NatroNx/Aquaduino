@@ -9,7 +9,8 @@
 // v.1.4.2 - 17.10.2015 - RGB visualisation ready
 // v.1.4.3 - 18.10.2015 - RGB finalized
 // v.1.5   - 04.11.2015 - added PH Curve
-
+// v.1.5.1 - 05.11.2015 - bugfixing
+// v.1.5.1 - 07.11.2015 - bugfixing | implementing TempCurve
 
 
 
@@ -92,6 +93,7 @@ float PhWert = 7.01; //sting to float to calculate with it
 float PHUpperLimit = 10;
 float PHLowerLimit = 5;
 float PHValues[96];
+float TempValues[62];
 
 boolean Co2Values[96];
 
@@ -99,7 +101,8 @@ boolean Co2Values[96];
 
 
 
-byte put_index = 0;
+byte  put_PHindex = 0;
+byte  put_TempIndex = 0;
 byte get_index = 1;
 /**<datatype> array [DIM_0_SIZE] [DIM_1_SIZE] = {
   //as many vals as dim1
@@ -650,6 +653,16 @@ void setup() {
     PHValues[i] = 7.0;
   }
 
+  for (int i = 0; i < 62; i++)
+  {
+    TempValues[i] = 26;
+  }
+
+
+
+
+
+
 
 
   //ph Stuff
@@ -750,7 +763,7 @@ void loop() {
         case 0:  // home screen
           if (((x >= HomeButtonCoord[0]) && (x <= HomeButtonCoord[2]))  && ((y >= HomeButtonCoord[1]) && (y <= HomeButtonCoord[3]))) // homebutton
           { waitForIt(HomeButtonCoord[0], HomeButtonCoord[1], HomeButtonCoord[2], HomeButtonCoord[3]);
-            lastScreen = 1; //we fake that we switched from another screen - this will FULL reload the HomeScreen on press on the Home button
+            // lastScreen = 1; //we fake that we switched from another screen - this will FULL reload the HomeScreen on press on the Home button
             dispScreen = 0;
             drawScreen();
           }
@@ -2321,11 +2334,13 @@ void loop() {
       lightCalculator();
       UpdateClockAndLight();
 
+   
+
 
 
       if (dispScreen < 1)
       { drawClockPhPWM();
-        drawCurve();
+     
       }
 
     }
@@ -2363,8 +2378,11 @@ void loop() {
 
     if (currentMillis - prevMillis15min > 900000)  //every 15 minutes write to file
     { prevMillis15min = millis();
-      writePHtoRingBuffer();
+      //writeToRingBuffer();
       writeFile();
+      writeToRingBuffer();  //testing
+      drawScreen();   //testing
+      
     }
 
 

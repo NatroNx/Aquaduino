@@ -237,11 +237,14 @@ void CleanMode()
 
 }
 
-void writePHtoRingBuffer()
-{ if ((PhWert <= PHUpperLimit + 0.2) && (PhWert >= PHLowerLimit - 0.2))
-  { PHValues[put_index] = PhWert;
-    Co2Values[put_index] = co2Value;
-    put_index = (put_index + 1) % 96;
+void writeToRingBuffer()
+{ TempValues[put_TempIndex] = Temp;
+  put_TempIndex = ( put_TempIndex + 1) % 62;
+
+  if ((PhWert <= PHUpperLimit + 0.2) && (PhWert >= PHLowerLimit - 0.2))
+  { PHValues[ put_PHindex] = PhWert;
+    Co2Values[ put_PHindex] = co2Value;
+     put_PHindex = ( put_PHindex + 1) % 96;
   }
 }
 
