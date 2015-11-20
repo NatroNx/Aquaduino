@@ -10,7 +10,8 @@
 // v.1.4.3 - 18.10.2015 - RGB finalized
 // v.1.5   - 04.11.2015 - added PH Curve
 // v.1.5.1 - 05.11.2015 - bugfixing
-// v.1.5.1 - 07.11.2015 - bugfixing | implementing TempCurve
+// v.1.5.2 - 07.11.2015 - bugfixing | implementing TempCurve
+// v.1.5.3 - 21.11.2015 - implement MoonMode
 
 
 
@@ -82,6 +83,16 @@ byte cleanFilter2Days;
 DateTime TVModeStart;
 boolean TVModeState = false;
 byte TVModeBrightness = 51; // (20%)
+
+DateTime MoonModeStart;
+boolean MoonModeState = false;
+byte MoonRed;
+byte MoonGreen;
+byte MoonBlue;
+byte MoonMinutes;
+
+
+
 
 
 int x, y; //touched coordinates
@@ -624,7 +635,10 @@ lightRGB[11].Minute=EEPROM.read(168);
 lightRGB[11].red=EEPROM.read(168);
 lightRGB[11].green=EEPROM.read(170);
 lightRGB[11].blue=EEPROM.read(171);
-
+MoonRed = EEPROM.read(172);
+ MoonGreen = EEPROM.read(173);
+  MoonBlue = EEPROM.read(174);
+  MoonMinutes = EEPROM.read(175);
 
 
 

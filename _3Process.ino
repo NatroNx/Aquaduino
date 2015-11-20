@@ -274,7 +274,7 @@ void getPHValue()
 
 }
 
-void TVMode()   //to start the TV Mode. the TV Mode resets as soon as the CalculatedPWM hit
+void TVMode()   //to start the TV Mode. the TV Mode resets as soon as the CalculatedPWM hit 0
 { TVModeStart = now;
   TVModeState = true;
   //TVModeBrightness in globalConfig is the Point Brightness starts
@@ -364,11 +364,21 @@ void lightCalculator()
       }
 
       //RGB
+      if (!MoonModeState)
+      {
       calculatedRed = oldRed + (int(((oldRed - newRed) / ((timeToNextLightRGB.totalseconds()) + abs(timeSinceLastLightRGB.totalseconds()))) * timeSinceLastLightRGB.totalseconds()));
       calculatedGreen = oldGreen + (int(((oldGreen - newGreen) / ((timeToNextLightRGB.totalseconds()) + abs(timeSinceLastLightRGB.totalseconds()))) * timeSinceLastLightRGB.totalseconds()));
       calculatedBlue = oldBlue + (int(((oldBlue - newBlue) / ((timeToNextLightRGB.totalseconds()) + abs(timeSinceLastLightRGB.totalseconds()))) * timeSinceLastLightRGB.totalseconds()));
+      }
+      else
+      {calculatedRed=MoonRed;
+       calculatedGreen=MoonGreen;
+       calculatedBlue=MoonBlue;
+      }
       //white
       calculatedPWM = oldPWM + (int(((oldPWM - newPWM) / ((timeToNextLight.totalseconds()) + abs(timeSinceLastLight.totalseconds()))) * timeSinceLastLight.totalseconds()));
+
+
 
       if (calculatedPWM > 90) //over 35% light - coolpump on
       {
@@ -754,8 +764,20 @@ void saveLightPWM()
 
 }
 
+void readMoonMode()
+{ MoonRed = EEPROM.read(172);
+ MoonGreen = EEPROM.read(173);
+  MoonBlue = EEPROM.read(174);
+  MoonMinutes = EEPROM.read(175);
+}
 
-
+void saveMoonMode()
+{EEPROM.write(172, MoonRed);
+  EEPROM.write(173, MoonGreen);
+  EEPROM.write(174, MoonBlue);
+  EEPROM.write(175, MoonMinutes);
+  
+}
 
 void readLightRGB()
 { lightRGB[0].Hour = EEPROM.read(112);
