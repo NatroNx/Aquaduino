@@ -82,9 +82,9 @@ byte cleanFilter2Days;
 
 DateTime TVModeStart;
 boolean TVModeState = false;
-byte TVModeBrightness = 51; // (20%)
+float TVModeBrightness; // (20%)
 
-DateTime MoonModeStart;
+DateTime MoonEnd;
 boolean MoonModeState = false;
 byte MoonRed;
 byte MoonGreen;
@@ -197,13 +197,17 @@ byte dPump3Pin = 5;
 byte redPin = 11;
 byte greenPin = 12;
 byte bluePin = 13;
-
+/**
 byte heaterPin = 12; //will be RF
 byte coolPin = 11; //will be RF
 byte co2Pin = 10; //will be RF
 byte pump1Pin = 13; //not used anymore RF now
 byte pump2Pin = 14; //not used anymore RF now
 byte light230Pin = 15; //not used anymore RF now
+**/
+
+
+
 boolean pump1Value = false;
 boolean pump2Value = false;
 boolean light230Value = true;
@@ -385,11 +389,11 @@ const short HeatCord[] = {248, 240 , 322, 314};
 const short DoseCord[] = {338, 240 , 412, 314};
 const short ScreenCord[] = {68, 330 , 142, 404};
 const short RGBCord[] = {158, 330 , 232, 404};
-
+const short TVModeCord[] = {248, 330 ,322, 404};
+const short MoonModeCord[] = {338, 330 ,412, 404};
 
 /** more buttons if needed
-const short Co2Cord[] = {248, 330 ,322, 404};
-const short ScreenCord[] = {248, 330 ,322, 404};
+
 */
 
 
@@ -703,17 +707,19 @@ void setup() {
   DateTime now = rtc.now();
   lastFert = now.unixtime() - 82800;
   sx1509.init();  // Initialize the SX1509, does Wire.begin()
-  sx1509.pinDir(pump1Pin, OUTPUT);  // Set SX1509 pin 14 as an output
+/**  sx1509.pinDir(pump1Pin, OUTPUT);  // Set SX1509 pin 14 as an output
   sx1509.pinDir(pump2Pin, OUTPUT);  //
   sx1509.pinDir(light230Pin, OUTPUT);  //
   sx1509.pinDir(light2Pin, OUTPUT);  //
   sx1509.pinDir(light1Pin, OUTPUT);  //
   sx1509.pinDir(co2Pin, OUTPUT);  //
   sx1509.pinDir(heaterPin, OUTPUT);  //
+    sx1509.pinDir(coolPin, OUTPUT);  //
+  */
   sx1509.pinDir(dPump1Pin, OUTPUT);  //
   sx1509.pinDir(dPump2Pin, OUTPUT);  //
   sx1509.pinDir(dPump3Pin, OUTPUT);  //
-  sx1509.pinDir(coolPin, OUTPUT);  //
+
   //END I2C
   //touchscreen
   myGLCD.InitLCD();
@@ -730,6 +736,8 @@ void setup() {
   readLightPWM();
   readLightRGB();
   readScreenScreen();
+  readMoonMode();
+  readTVMode();
 
 
   timeToNextLight = now.unixtime() - (now.unixtime() - 86400 * 7); //set it to 7 days as fallback
@@ -1075,6 +1083,20 @@ void loop() {
           { waitForIt(RGBCord[0], RGBCord[1], RGBCord[2], RGBCord[3]);
             dispScreen = 14;
             drawScreen();
+          }
+          else if (((x >= TVModeCord[0]) && (x <= TVModeCord[2]))  && ((y >= TVModeCord[1]) && (y <= TVModeCord[3]))) // homebutton
+          { waitForIt(TVModeCord[0], TVModeCord[1], TVModeCord[2], TVModeCord[3]);
+            dispScreen = 15;
+            drawScreen();
+            TVMode();
+            drawScreen();
+          }
+          else if (((x >= MoonModeCord[0]) && (x <= MoonModeCord[2]))  && ((y >= MoonModeCord[1]) && (y <= MoonModeCord[3]))) // homebutton
+          { waitForIt(MoonModeCord[0], MoonModeCord[1], MoonModeCord[2], MoonModeCord[3]);
+            dispScreen = 16;
+            drawScreen();
+            MoonMode();
+          
           }
 
 
@@ -2206,14 +2228,6 @@ void loop() {
             UpdateRGBSceneTOP();
           }
 
-
-
-
-
-
-
-
-
           else if (((x >= powCo2OnHourUp[0]) && (x <= powCo2OnHourUp[2]))  && ((y >= powCo2OnHourUp[1]) && (y <= powCo2OnHourUp[3]))) // homebutton
           { waitForIt(powCo2OnHourUp[0], powCo2OnHourUp[1], powCo2OnHourUp[2], powCo2OnHourUp[3]);
             if ((lightRGB[RGBScreenSet + 1].Hour >= 23) && (lightRGB[RGBScreenSet + 1].Hour <= 250)) {
@@ -2303,11 +2317,6 @@ void loop() {
             UpdateRGBSceneBOT();
           }
 
-
-
-
-
-
           else if (((x >= SetPowerSchedCord[0]) && (x <= SetPowerSchedCord[2]))  && ((y >= SetPowerSchedCord[1]) && (y <= SetPowerSchedCord[3]))) // homebutton
           { waitForIt(SetPowerSchedCord[0], SetPowerSchedCord[1], SetPowerSchedCord[2], SetPowerSchedCord[3]);
             saveLightRGB();
@@ -2322,6 +2331,148 @@ void loop() {
           }
           break;
 
+          case 16: //moonmode
+
+          if (((x >= BottomButtonCoord[0]) && (x <= BottomButtonCoord[2]))  && ((y >= BottomButtonCoord[1]) && (y <= BottomButtonCoord[3]))) // homebutton
+          { waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
+            dispScreen = 0;
+            drawScreen();
+          }
+
+          else if (((x >= powLightOnMinuteUp[0]) && (x <= powLightOnMinuteUp[2]))  && ((y >= powLightOnMinuteUp[1]) && (y <= powLightOnMinuteUp[3])))
+          { waitForIt(powLightOnMinuteUp[0], powLightOnMinuteUp[1], powLightOnMinuteUp[2], powLightOnMinuteUp[3]);
+            MoonMinutes++;
+            UpdateMoonScreen();
+          }
+          else if (((x >= powLightOnMinuteDown[0]) && (x <= powLightOnMinuteDown[2]))  && ((y >= powLightOnMinuteDown[1]) && (y <= powLightOnMinuteDown[3])))
+          { waitForIt(powLightOnMinuteDown[0], powLightOnMinuteDown[1], powLightOnMinuteDown[2], powLightOnMinuteDown[3]);
+            MoonMinutes--;
+            UpdateMoonScreen();
+          }
+
+          else if (((x >= red1Up[0]) && (x <= red1Up[2]))  && ((y >= red1Up[1]) && (y <= red1Up[3])))
+          { waitForIt(red1Up[0], red1Up[1], red1Up[2], red1Up[3]);
+            MoonRed += 1;
+            UpdateMoonScreen();
+            analogWrite(redPin, MoonRed);
+            analogWrite(greenPin, MoonGreen);
+            analogWrite(bluePin, MoonBlue);
+
+
+          }
+          else if (((x >= red1Down[0]) && (x <= red1Down[2]))  && ((y >= red1Down[1]) && (y <= red1Down[3])))
+          { waitForIt(red1Down[0], red1Down[1], red1Down[2], red1Down[3]);
+            MoonRed -= 1;
+            analogWrite(redPin, MoonRed);
+            analogWrite(greenPin, MoonGreen);
+            analogWrite(bluePin, MoonBlue);
+            UpdateMoonScreen();
+          }
+
+
+          else if (((x >= powLightOffHourUp[0]) && (x <= powLightOffHourUp[2]))  && ((y >= powLightOffHourUp[1]) && (y <= powLightOffHourUp[3])))
+          { waitForIt(powLightOffHourUp[0], powLightOffHourUp[1], powLightOffHourUp[2], powLightOffHourUp[3]);
+            MoonGreen += 1;
+            analogWrite(redPin, MoonRed);
+            analogWrite(greenPin, MoonGreen);
+            analogWrite(bluePin, MoonBlue);
+            UpdateMoonScreen();
+          }
+          else if (((x >= powLightOffHourDown[0]) && (x <= powLightOffHourDown[2]))  && ((y >= powLightOffHourDown[1]) && (y <= powLightOffHourDown[3])))
+          { waitForIt(powLightOffHourDown[0], powLightOffHourDown[1], powLightOffHourDown[2], powLightOffHourDown[3]);
+            MoonGreen -= 1;
+            analogWrite(redPin, MoonRed);
+            analogWrite(greenPin, MoonGreen);
+            analogWrite(bluePin, MoonBlue);
+            UpdateMoonScreen();
+          }
+
+          else if (((x >= powLightOffMinuteUp[0]) && (x <= powLightOffMinuteUp[2]))  && ((y >= powLightOffMinuteUp[1]) && (y <= powLightOffMinuteUp[3])))
+          { waitForIt(powLightOffMinuteUp[0], powLightOffMinuteUp[1], powLightOffMinuteUp[2], powLightOffMinuteUp[3]);
+            MoonBlue += 1;
+            analogWrite(redPin, MoonRed);
+            analogWrite(greenPin, MoonGreen);
+            analogWrite(bluePin, MoonBlue);
+            UpdateMoonScreen();
+          }
+          else if (((x >= powLightOffMinuteDown[0]) && (x <= powLightOffMinuteDown[2]))  && ((y >= powLightOffMinuteDown[1]) && (y <= powLightOffMinuteDown[3])))
+          { waitForIt(powLightOffMinuteDown[0], powLightOffMinuteDown[1], powLightOffMinuteDown[2], powLightOffMinuteDown[3]);
+            MoonBlue -= 1;
+            analogWrite(redPin, MoonRed);
+            analogWrite(greenPin, MoonGreen);
+            analogWrite(bluePin, MoonBlue);
+            UpdateMoonScreen();
+          }
+
+
+
+
+
+          else if (((x >= SetPowerSchedCord[0]) && (x <= SetPowerSchedCord[2]))  && ((y >= SetPowerSchedCord[1]) && (y <= SetPowerSchedCord[3]))) // homebutton
+          { waitForIt(SetPowerSchedCord[0], SetPowerSchedCord[1], SetPowerSchedCord[2], SetPowerSchedCord[3]);
+            saveMoonMode();
+            dispScreen = 3;
+            drawScreen();
+          }
+          else if (((x >= CancelPowerSchedCord[0]) && (x <= CancelPowerSchedCord[2]))  && ((y >= CancelPowerSchedCord[1]) && (y <= CancelPowerSchedCord[3]))) // homebutton
+          { waitForIt(CancelPowerSchedCord[0], CancelPowerSchedCord[1], CancelPowerSchedCord[2], CancelPowerSchedCord[3]);
+            readMoonMode();
+            dispScreen = 3;
+            drawScreen();
+          }
+          break;
+
+
+
+         case 15: //TVMode
+
+          if (((x >= BottomButtonCoord[0]) && (x <= BottomButtonCoord[2]))  && ((y >= BottomButtonCoord[1]) && (y <= BottomButtonCoord[3]))) // homebutton
+          { waitForIt(BottomButtonCoord[0], BottomButtonCoord[1], BottomButtonCoord[2], BottomButtonCoord[3]);
+            dispScreen = 0;
+            drawScreen();
+          }
+
+          else if (((x >= powLightOnMinuteUp[0]) && (x <= powLightOnMinuteUp[2]))  && ((y >= powLightOnMinuteUp[1]) && (y <= powLightOnMinuteUp[3])))
+          { waitForIt(powLightOnMinuteUp[0], powLightOnMinuteUp[1], powLightOnMinuteUp[2], powLightOnMinuteUp[3]);
+            TVModeBrightness+= 2.55;
+            if (TVModeBrightness> 255)
+            { TVModeBrightness= 0;
+            }
+            if (TVModeBrightness< 0)
+            { TVModeBrightness= 255;
+            }
+            UpdateTVScreen();
+            analogWrite(lightPwmPin, TVModeBrightness);
+          }
+          else if (((x >= powLightOnMinuteDown[0]) && (x <= powLightOnMinuteDown[2]))  && ((y >= powLightOnMinuteDown[1]) && (y <= powLightOnMinuteDown[3])))
+          { waitForIt(powLightOnMinuteDown[0], powLightOnMinuteDown[1], powLightOnMinuteDown[2], powLightOnMinuteDown[3]);
+            TVModeBrightness-= 2.55;
+            if (TVModeBrightness> 255)
+            { TVModeBrightness= 0;
+            }
+            if (TVModeBrightness< 0)
+            { TVModeBrightness= 255;
+            }
+            UpdateTVScreen();
+            analogWrite(lightPwmPin, TVModeBrightness);
+          }
+
+ 
+
+
+          else if (((x >= SetPowerSchedCord[0]) && (x <= SetPowerSchedCord[2]))  && ((y >= SetPowerSchedCord[1]) && (y <= SetPowerSchedCord[3]))) // homebutton
+          { waitForIt(SetPowerSchedCord[0], SetPowerSchedCord[1], SetPowerSchedCord[2], SetPowerSchedCord[3]);
+            saveTVMode();
+            dispScreen = 3;
+            drawScreen();
+          }
+          else if (((x >= CancelPowerSchedCord[0]) && (x <= CancelPowerSchedCord[2]))  && ((y >= CancelPowerSchedCord[1]) && (y <= CancelPowerSchedCord[3]))) // homebutton
+          { waitForIt(CancelPowerSchedCord[0], CancelPowerSchedCord[1], CancelPowerSchedCord[2], CancelPowerSchedCord[3]);
+            readTVMode();
+            dispScreen = 3;
+            drawScreen();
+          }
+          break;
 
 
 
@@ -2330,6 +2481,12 @@ void loop() {
 
 
 
+
+
+
+
+
+          
 
       }
 

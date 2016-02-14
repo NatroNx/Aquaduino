@@ -87,6 +87,12 @@ void drawScreen()
     case 146:
       RGBScene();
       break;
+    case 15:
+      TVScreen();
+      break;
+    case 16:
+      MoonScreen();
+      break;
   }
 }
 
@@ -380,6 +386,16 @@ void drawClockPhPWM()
   { myGLCD.setColor(col_red.r, col_red.g, col_red.b);
     myGLCD.print("TV MODE active         ", 5, 545);
   }
+  else if (MoonModeState)
+  { myGLCD.setColor(col_red.r, col_red.g, col_red.b);
+    myGLCD.print("Moonligt ends @", 5, 545);
+    myGLCD.setColor(col_white.r, col_white.g, col_white.b);
+    myGLCD.printNumI(MoonEnd.hour(), 310 - 55, 545, 2, 48);
+    myGLCD.print(":", 360 - 70, 545);
+    myGLCD.printNumI(MoonEnd.minute(), 380 - 75, 545, 2, 48);
+
+    
+  }
   else
   { myGLCD.print("                     ", 5, 545);
   }
@@ -664,6 +680,8 @@ void SettingsScreen()
   myFiles.load(DoseCord[0], DoseCord[1], 74, 74, "74Dose.raw");
   myFiles.load(ScreenCord[0], ScreenCord[1], 74, 74, "74Scree.raw");
   myFiles.load(RGBCord[0], RGBCord[1], 74, 74, "74RGB.raw");
+  myFiles.load(TVModeCord[0], TVModeCord[1], 74, 74, "74TV.raw");
+  myFiles.load(MoonModeCord[0], MoonModeCord[1], 74, 74, "74Moon.raw");
 
 
   //footer starts here
@@ -1189,6 +1207,134 @@ void RGBScene()
   myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
+
+
+
+
+
+void MoonScreen()
+{ //Statusline TOP
+
+  myGLCD.setFont(UbuntuBold);
+  myGLCD.setColor(135, 171, 255);
+  myGLCD.print("MOONLIGHT MODE", 77, 40);
+  myFiles.load(6, 24, 60, 60, "60Moon.raw");
+  myGLCD.setColor(255, 255, 255);
+  myGLCD.drawLine(66, 75, 450, 75);
+  //end of >TOP
+
+  myGLCD.setColor(135, 171, 255);
+  myGLCD.print("Minutes", 20, 100);
+  myGLCD.print("RGB", 20, 230);
+
+
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+
+
+  myFiles.load(red1Up[0], red1Up[1], 48, 48, "48up.raw"); //red 1 up
+  myFiles.load(red1Down[0], red1Down[1], 48, 48, "48up.raw"); //red 1 down
+  myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw"); //green 1  up
+  myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw"); //green 1 down
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw"); //blue 1 up
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw"); //blue 1 down
+
+
+
+
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+
+ UpdateMoonScreen();
+
+  //footer starts here
+  myGLCD.setColor(col_white.r, col_white.g, col_white.b);
+  myGLCD.drawLine(30, 770, 196, 770);
+  myGLCD.drawLine(284, 770, 450, 770);
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+
+}
+
+
+
+
+
+void UpdateMoonScreen()
+{ myGLCD.setFont(UbuntuBold);
+
+
+  myGLCD.setColor(255, 255, 255);
+
+  myGLCD.printNumI(MoonMinutes, 335, 145, 3);
+  if ((MoonRed + MoonGreen + MoonBlue) < 60)
+  {
+    myGLCD.setColor(100, 100, 100);
+  }
+  else
+  {
+    myGLCD.setColor(MoonRed, MoonGreen, MoonBlue);
+  }
+  myGLCD.printNumI(MoonRed, 49, 275,3);
+  myGLCD.printNumI(MoonGreen, 192, 275,3);
+  myGLCD.printNumI(MoonBlue, 335, 275,3);
+
+
+}
+
+
+
+
+
+void TVScreen()
+{ //Statusline TOP
+
+  myGLCD.setFont(UbuntuBold);
+  myGLCD.setColor(0, 97, 23);
+  myGLCD.print("TV MODE", 77, 40);
+  myFiles.load(6, 24, 60, 60, "60TV.raw");
+  myGLCD.setColor(255, 255, 255);
+  myGLCD.drawLine(66, 75, 450, 75);
+  //end of >TOP
+  myGLCD.setColor(0, 97, 23);
+  myGLCD.print("Brightness", 20, 100);
+
+
+
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+
+
+
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+
+ UpdateTVScreen();
+
+  //footer starts here
+  myGLCD.setColor(col_white.r, col_white.g, col_white.b);
+  myGLCD.drawLine(30, 770, 196, 770);
+  myGLCD.drawLine(284, 770, 450, 770);
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+
+}
+
+
+
+void UpdateTVScreen()
+{ myGLCD.setFont(UbuntuBold);
+
+
+ myGLCD.setColor(255, 255, 255);
+
+  myGLCD.printNumI(int(TVModeBrightness * 100 / 255), 335, 145, 3);
+
+}
+
+
+
+
+
+
 
 
 void UpdateRGBSceneTOP()

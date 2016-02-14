@@ -143,7 +143,7 @@ void UpdateClockAndLight()
   now = rtc.now();
   //calculatedPWM=calculatedPWM+255;
   analogWrite(lightPwmPin, calculatedPWM);
-  if (dispScreen != 141 && dispScreen != 142 && dispScreen != 143 && dispScreen != 144 && dispScreen != 145 && dispScreen != 146)
+  if (dispScreen != 141 && dispScreen != 142 && dispScreen != 143 && dispScreen != 144 && dispScreen != 145 && dispScreen != 146 && dispScreen != 16)
   {
     analogWrite(redPin, calculatedRed);
     analogWrite(greenPin, calculatedGreen);
@@ -164,6 +164,20 @@ void processRFInput()
       }
     case f44off:
       { TVModeState = false;
+        lightCalculator();
+        UpdateClockAndLight();
+        AI();
+        break;
+      }
+    case f43on:
+      { MoonMode();
+        lightCalculator();
+        UpdateClockAndLight();
+        AI();
+        break;
+      }
+    case f43off:
+      { MoonModeState = false;
         lightCalculator();
         UpdateClockAndLight();
         AI();
@@ -215,6 +229,21 @@ void GetTemperature()
 { sensors.requestTemperatures();
   Temp = sensors.getTempCByIndex(0);
 }
+
+
+void MoonMode()
+{ if (!MoonModeState)
+  {
+    MoonEnd = now.unixtime() + (60 * MoonMinutes);
+  }
+  MoonModeState = true;
+  light230Value = false;
+
+  processRelais();
+  UpdateClockAndLight();
+  drawScreen();
+}
+
 
 void CleanMode()
 { if (!cleaningInProcess)
@@ -277,12 +306,12 @@ void getPHValue()
 void TVMode()   //to start the TV Mode. the TV Mode resets as soon as the CalculatedPWM hit 0
 { TVModeStart = now;
   TVModeState = true;
-  //TVModeBrightness in globalConfig is the Point Brightness starts
+  //TVModeBrightness is the Point Brightness starts
 }
 
 void lightCalculator()
 { if (!manualOverride && !cleaningInProcess)
-  { TimeSpan helpSpan  = now.unixtime() - (now.unixtime() - 86400 * 7); //set it to 7 days as fallback
+   {TimeSpan helpSpan  = now.unixtime() - (now.unixtime() - 86400 * 7); //set it to 7 days as fallback
     timeSinceLastLight  = now.unixtime() - (now.unixtime() + 86400 * 7); //set it to -7 days as fallback
     timeToNextLight = now.unixtime() - (now.unixtime() - 86400 * 7); //set it to 7 days as fallback
     float oldPWM = 255;
@@ -369,14 +398,16 @@ void lightCalculator()
       calculatedRed = oldRed + (int(((oldRed - newRed) / ((timeToNextLightRGB.totalseconds()) + abs(timeSinceLastLightRGB.totalseconds()))) * timeSinceLastLightRGB.totalseconds()));
       calculatedGreen = oldGreen + (int(((oldGreen - newGreen) / ((timeToNextLightRGB.totalseconds()) + abs(timeSinceLastLightRGB.totalseconds()))) * timeSinceLastLightRGB.totalseconds()));
       calculatedBlue = oldBlue + (int(((oldBlue - newBlue) / ((timeToNextLightRGB.totalseconds()) + abs(timeSinceLastLightRGB.totalseconds()))) * timeSinceLastLightRGB.totalseconds()));
+      calculatedPWM = oldPWM + (int(((oldPWM - newPWM) / ((timeToNextLight.totalseconds()) + abs(timeSinceLastLight.totalseconds()))) * timeSinceLastLight.totalseconds()));
       }
       else
       {calculatedRed=MoonRed;
        calculatedGreen=MoonGreen;
        calculatedBlue=MoonBlue;
+       calculatedPWM=0;
       }
       //white
-      calculatedPWM = oldPWM + (int(((oldPWM - newPWM) / ((timeToNextLight.totalseconds()) + abs(timeSinceLastLight.totalseconds()))) * timeSinceLastLight.totalseconds()));
+
 
 
 
@@ -458,7 +489,7 @@ void lightCalculator()
 
 void AI()
 { wdt_reset();
-  if (!manualOverride && !cleaningInProcess)
+  if (!manualOverride && !cleaningInProcess && !MoonModeState)
   { DateTime CompareLightOnTime (now.year(), now.month(), now.day(), int(powLightOnHour), int(powLightOnMinute), 0);
     DateTime CompareLightOffTime (now.year(), now.month(), now.day(), int(powLightOffHour), int(powLightOffMinute), 0);
     DateTime CompareCO2OnTime (now.year(), now.month(), now.day(), int(powCo2OnHour), int(powCo2OnMinute), 0);
@@ -500,7 +531,8 @@ void AI()
     processRelais();
     updateHomeScreen();
   }
-  else if (!manualOverride && (now.unixtime() >= cleanEnd.unixtime()))
+  
+  else if (!manualOverride && (now.unixtime() >= cleanEnd.unixtime())&& !MoonModeState)
   { cleaningInProcess = false;
     pump1Value = false;
     pump2Value = false;
@@ -510,6 +542,9 @@ void AI()
     lightCalculator();
     AI();
     processPump();
+  }
+  else if (now.unixtime() >= MoonEnd.unixtime())
+  {MoonModeState = false;    
   }
 
 
@@ -778,6 +813,22 @@ void saveMoonMode()
   EEPROM.write(175, MoonMinutes);
   
 }
+
+
+
+void readTVMode()
+{ TVModeBrightness = EEPROM.read(176);
+
+}
+
+void saveTVMode()
+{EEPROM.write(176, TVModeBrightness);
+
+  
+}
+
+
+
 
 void readLightRGB()
 { lightRGB[0].Hour = EEPROM.read(112);
