@@ -710,8 +710,7 @@ void setup() {
 /**  sx1509.pinDir(pump1Pin, OUTPUT);  // Set SX1509 pin 14 as an output
   sx1509.pinDir(pump2Pin, OUTPUT);  //
   sx1509.pinDir(light230Pin, OUTPUT);  //
-  sx1509.pinDir(light2Pin, OUTPUT);  //
-  sx1509.pinDir(light1Pin, OUTPUT);  //
+
   sx1509.pinDir(co2Pin, OUTPUT);  //
   sx1509.pinDir(heaterPin, OUTPUT);  //
     sx1509.pinDir(coolPin, OUTPUT);  //
@@ -719,7 +718,8 @@ void setup() {
   sx1509.pinDir(dPump1Pin, OUTPUT);  //
   sx1509.pinDir(dPump2Pin, OUTPUT);  //
   sx1509.pinDir(dPump3Pin, OUTPUT);  //
-
+  sx1509.pinDir(light2Pin, OUTPUT);  //
+  sx1509.pinDir(light1Pin, OUTPUT);  //
   //END I2C
   //touchscreen
   myGLCD.InitLCD();
