@@ -176,10 +176,10 @@ void HomeScreen()
   // lightmode
   myFiles.load(LightUp[0], LightUp[1], 48, 48, "48up.raw");
   myFiles.load(LightDown[0], LightDown[1], 48, 48, "48down.raw");
-  //myFiles.load(90, 85, 120, 102, "1therm.raw");
+  // myFiles.load(90, 85, 120, 102, "1therm.raw");
   //draw the fertilizer
   myGLCD.drawLine(30, 570, 450, 570); //3rd line
-    myFiles.load(21, 615, 438, 96, "DockNew.raw");
+  myFiles.load(21, 615, 438, 96, "DockNew.raw");
   myGLCD.setFont(BigFont);
   myGLCD.print("Home", 37, 720);
   myGLCD.print("Feed", 149, 720);
@@ -192,7 +192,7 @@ void HomeScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "ResetF.raw");
+  myFiles.load(216, 746, 48, 48, "ResetF.raw");
 
 
 
@@ -270,64 +270,64 @@ void updateHomeScreen()
 { wdt_reset();
   if (dispScreen < 1)
   { if (!pump1Value) {
-        myFiles.load(340, 290, 48, 48, "3filt_N.raw");
+      myFiles.load(340, 290, 48, 48, "3filt_N.raw");
     }
     else {
-        myFiles.load(340, 290, 48, 48, "3filt_F.raw");
+      myFiles.load(340, 290, 48, 48, "3filt_F.raw");
     }
     if (!pump2Value)  {
-        myFiles.load(393, 290, 48, 48, "3filt_N.raw");
+      myFiles.load(393, 290, 48, 48, "3filt_N.raw");
     }
     else   {
-        myFiles.load(393, 290, 48, 48, "3filt_F.raw");
+      myFiles.load(393, 290, 48, 48, "3filt_F.raw");
     }
     if (!light230Value) {
-        myFiles.load(340, 343, 48, 48, "3light_N.raw");
+      myFiles.load(340, 343, 48, 48, "3light_N.raw");
     }
     else {
-        myFiles.load(340, 343, 48, 48, "3light_F.raw");
+      myFiles.load(340, 343, 48, 48, "3light_F.raw");
     }
     if (!light2Value) {
-        myFiles.load(393, 343, 48, 48, "3light_N.raw");
+      myFiles.load(393, 343, 48, 48, "3light_N.raw");
     }
     else {
-        myFiles.load(393, 343, 48, 48, "3light_F.raw");
+      myFiles.load(393, 343, 48, 48, "3light_F.raw");
     }
     if (!co2Value) {
-        myFiles.load(340, 396, 48, 48, "3co2_N.raw");
+      myFiles.load(340, 396, 48, 48, "3co2_N.raw");
     }
     else  {
-        myFiles.load(340, 396, 48, 48, "3co2_F.raw");
+      myFiles.load(340, 396, 48, 48, "3co2_F.raw");
     }
     if (!heaterValue ) {
-        myFiles.load(393, 396, 48, 48, "3heat_N.raw");
+      myFiles.load(393, 396, 48, 48, "3heat_N.raw");
     }
     else {
-        myFiles.load(393, 396, 48, 48, "3heat_F.raw");
+      myFiles.load(393, 396, 48, 48, "3heat_F.raw");
     }
     if (!coolValue)  {
-        myFiles.load(340, 449, 48, 48, "3circ_N.raw");
+      myFiles.load(340, 449, 48, 48, "3circ_N.raw");
     }
     else {
-        myFiles.load(340, 449, 48, 48, "3circ_F.raw");
+      myFiles.load(340, 449, 48, 48, "3circ_F.raw");
     }
     if (!dPump1Value) {
-        myFiles.load(393, 449, 48, 48, "1nN.raw");
+      myFiles.load(393, 449, 48, 48, "1nN.raw");
     }
     else {
-        myFiles.load(393, 449, 48, 48, "1nF.raw");
+      myFiles.load(393, 449, 48, 48, "1nF.raw");
     }
     if (!dPump2Value) {
-        myFiles.load(340, 502, 48, 48, "1npkN.raw");
+      myFiles.load(340, 502, 48, 48, "1npkN.raw");
     }
     else {
-        myFiles.load(340, 502, 48, 48, "1npkF.raw");
+      myFiles.load(340, 502, 48, 48, "1npkF.raw");
     }
     if (!dPump3Value)  {
-        myFiles.load(393, 502, 48, 48, "1feN.raw");
+      myFiles.load(393, 502, 48, 48, "1feN.raw");
     }
     else {
-        myFiles.load(393, 502, 48, 48, "1feF.raw");
+      myFiles.load(393, 502, 48, 48, "1feF.raw");
     }
   }
 }
@@ -335,19 +335,19 @@ void updateHomeScreen()
 void drawFertilizer()  //methode zur Berechnung der DÃ¼ngermenge sowie Darstellung der DÃ¼ngerreserve
 { if (dispScreen < 1)
   { myGLCD.setFont(BigFont);
-      myFiles.load(166, 370, 46, 130, "1ferts.raw");
+    myFiles.load(166, 370, 46, 130, "1ferts.raw");
     myGLCD.setColor(col_FertiN.r, col_FertiN.g, col_FertiN.b);
     myGLCD.fillRect(178, (484 - ((100 / (FMax[0] / FDose[0])) * ((FLeft[0] / (FDose[0]))))), 199, 484);
     myGLCD.printNumI((FLeft[0] / FDose[0]), 164, 348, 2);
     myGLCD.print("N", 180, 330, 2);
 
-      myFiles.load(217, 370, 46, 130, "1ferts.raw");
+    myFiles.load(217, 370, 46, 130, "1ferts.raw");
     myGLCD.setColor(col_FertiNPK.r, col_FertiNPK.g, col_FertiNPK.b);
     myGLCD.fillRect(229, (484 - ((100 / (FMax[1] / FDose[1])) * ((FLeft[1] / (FDose[1]))))), 250, 484);
     myGLCD.printNumI((FLeft[1] / FDose[1]), 217, 348, 2);
     myGLCD.print("NPK", 218, 330, 2);
 
-      myFiles.load(268, 370, 46, 130, "1ferts.raw");
+    myFiles.load(268, 370, 46, 130, "1ferts.raw");
     myGLCD.setColor(col_FertiFE.r, col_FertiFE.g, col_FertiFE.b);
     myGLCD.fillRect(280, (484 - ((100 / (FMax[2] / FDose[2])) * ((FLeft[2] / (FDose[2]))))), 301, 484);
     myGLCD.printNumI((FLeft[2] / FDose[2]), 267, 348, 2);
@@ -359,11 +359,11 @@ void drawClockPhPWM()
 {
   if (Temp >= TempUpperLimit)
   {
-      myFiles.load(26, 85, 105, 90, "1thermR.raw");
+    myFiles.load(26, 85, 105, 90, "1thermR.raw");
   }
   else
   {
-      myFiles.load(26, 85, 105, 90, "1therm.raw");
+    myFiles.load(26, 85, 105, 90, "1therm.raw");
   }
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.setFont(SevenSegmentFull);
@@ -449,80 +449,80 @@ void FeedScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(0, 219, 0);
   myGLCD.print("FEEDING     ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Clea.raw");
+  myFiles.load(6, 24, 60, 60, "60Clea.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
   myGLCD.print("FEEDING", 20, 136);
   myGLCD.print("in progress...", 135, 180);
   myGLCD.print("RESET", 110, 635);
-    myFiles.load(20, 608, 74, 74, "74Reset.raw");
+  myFiles.load(20, 608, 74, 74, "74Reset.raw");
 
 
   if (!pump1Value) {
-      myFiles.load(340, 290, 48, 48, "3filt_N.raw");
+    myFiles.load(340, 290, 48, 48, "3filt_N.raw");
   }
   else {
-      myFiles.load(340, 290, 48, 48, "3filt_F.raw");
+    myFiles.load(340, 290, 48, 48, "3filt_F.raw");
   }
   if (!pump2Value)  {
-      myFiles.load(393, 290, 48, 48, "3filt_N.raw");
+    myFiles.load(393, 290, 48, 48, "3filt_N.raw");
   }
   else   {
-      myFiles.load(393, 290, 48, 48, "3filt_F.raw");
+    myFiles.load(393, 290, 48, 48, "3filt_F.raw");
   }
   if (!light230Value) {
-      myFiles.load(340, 343, 48, 48, "3light_N.raw");
+    myFiles.load(340, 343, 48, 48, "3light_N.raw");
   }
   else {
-      myFiles.load(340, 343, 48, 48, "3light_F.raw");
+    myFiles.load(340, 343, 48, 48, "3light_F.raw");
   }
   if (!light2Value) {
-      myFiles.load(393, 343, 48, 48, "3light_N.raw");
+    myFiles.load(393, 343, 48, 48, "3light_N.raw");
   }
   else {
-      myFiles.load(393, 343, 48, 48, "3light_F.raw");
+    myFiles.load(393, 343, 48, 48, "3light_F.raw");
   }
   if (!co2Value) {
-      myFiles.load(340, 396, 48, 48, "3co2_N.raw");
+    myFiles.load(340, 396, 48, 48, "3co2_N.raw");
   }
   else  {
-      myFiles.load(340, 396, 48, 48, "3co2_F.raw");
+    myFiles.load(340, 396, 48, 48, "3co2_F.raw");
   }
   if (!heaterValue ) {
-      myFiles.load(393, 396, 48, 48, "3heat_N.raw");
+    myFiles.load(393, 396, 48, 48, "3heat_N.raw");
   }
   else {
-      myFiles.load(393, 396, 48, 48, "3heat_F.raw");
+    myFiles.load(393, 396, 48, 48, "3heat_F.raw");
   }
   wdt_reset();
   if (!dPump1Value) {
-      myFiles.load(340, 449, 48, 48, "1nN.raw");
+    myFiles.load(340, 449, 48, 48, "1nN.raw");
   }
   else {
-      myFiles.load(340, 449, 48, 48, "1nF.raw");
+    myFiles.load(340, 449, 48, 48, "1nF.raw");
   }
   if (!dPump2Value) {
-      myFiles.load(393, 449, 48, 48, "1npkN.raw");
+    myFiles.load(393, 449, 48, 48, "1npkN.raw");
   }
   else {
-      myFiles.load(393, 449, 48, 48, "1npkF.raw");
+    myFiles.load(393, 449, 48, 48, "1npkF.raw");
   }
   if (!dPump3Value)  {
-      myFiles.load(340, 502, 48, 48, "1feN.raw");
+    myFiles.load(340, 502, 48, 48, "1feN.raw");
   }
   else {
-      myFiles.load(340, 502, 48, 48, "1feF.raw");
+    myFiles.load(340, 502, 48, 48, "1feF.raw");
   }
   if (!coolValue)  {
-      myFiles.load(393, 502, 48, 48, "3circ_N.raw");
+    myFiles.load(393, 502, 48, 48, "3circ_N.raw");
   }
   else {
-      myFiles.load(393, 502, 48, 48, "3circ_F.raw");
+    myFiles.load(393, 502, 48, 48, "3circ_F.raw");
   }
 
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
-    myFiles.load(80, 310, 184, 184, "2feeding.raw");
+  myFiles.load(80, 310, 184, 184, "2feeding.raw");
   myGLCD.setFont(BigFont);
 
   /*  myGLCD.print("Feed mode ends at:", 20, 520);
@@ -536,7 +536,7 @@ void FeedScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 }
 
 
@@ -548,13 +548,13 @@ void PowerScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(219, 0, 0);
   myGLCD.print("POWER       ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Powe.raw");
+  myFiles.load(6, 24, 60, 60, "60Powe.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
 
   //icons starts here
-  //  myFiles.load(40, 180,74,74, "74LED_N.raw");
+  //myFiles.load(40, 180,74,74, "74LED_N.raw");
   //icosn end here
   updatePowerIcons();
 
@@ -603,57 +603,57 @@ void PowerScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 }
 
 
 
 void updatePowerIcons()
 { if (!pump1Value) {
-      myFiles.load(20, 150, 74, 74, "74Filt_N.raw");
+    myFiles.load(20, 150, 74, 74, "74Filt_N.raw");
   }
   else {
-      myFiles.load(20, 150, 74, 74, "74Filt_F.raw");
+    myFiles.load(20, 150, 74, 74, "74Filt_F.raw");
   }
   if (!pump2Value)  {
-      myFiles.load(250, 150, 74, 74, "74Filt_N.raw");
+    myFiles.load(250, 150, 74, 74, "74Filt_N.raw");
   }
   else   {
-      myFiles.load(250, 150, 74, 74, "74Filt_F.raw");
+    myFiles.load(250, 150, 74, 74, "74Filt_F.raw");
   }
   if (!light230Value) {
-      myFiles.load(20, 234, 74, 74, "74LED_N.raw");
+    myFiles.load(20, 234, 74, 74, "74LED_N.raw");
   }
   else {
-      myFiles.load(20, 234, 74, 74, "74LED_F.raw");
+    myFiles.load(20, 234, 74, 74, "74LED_F.raw");
   }
   if (!light2Value) {
-      myFiles.load(250, 234, 74, 74, "74LED_N.raw");
+    myFiles.load(250, 234, 74, 74, "74LED_N.raw");
   }
   else {
-      myFiles.load(250, 234, 74, 74, "74LED_F.raw");
+    myFiles.load(250, 234, 74, 74, "74LED_F.raw");
   }
   if (!co2Value) {
-      myFiles.load(20, 318, 74, 74, "74CO2_N.raw");
+    myFiles.load(20, 318, 74, 74, "74CO2_N.raw");
   }
   else  {
-      myFiles.load(20, 318, 74, 74, "74CO2_F.raw");
+    myFiles.load(20, 318, 74, 74, "74CO2_F.raw");
   }
   if (!heaterValue ) {
-      myFiles.load(250, 318, 74, 74, "74heat_N.raw");
+    myFiles.load(250, 318, 74, 74, "74heat_N.raw");
   }
   else {
-      myFiles.load(250, 318, 74, 74, "74heat_F.raw");
+    myFiles.load(250, 318, 74, 74, "74heat_F.raw");
   }
   if (!coolValue)  {
-      myFiles.load(20, 402, 74, 74, "74Fan_N.raw");
+    myFiles.load(20, 402, 74, 74, "74Fan_N.raw");
   }
   else {
-      myFiles.load(20, 402, 74, 74, "74Fan_F.raw");
+    myFiles.load(20, 402, 74, 74, "74Fan_F.raw");
   }
-    myFiles.load(20, 524, 74, 74, "74OFF.raw");
-    myFiles.load(20, 608, 74, 74, "74Reset.raw");
-    myFiles.load(250, 524, 74, 74, "74CleanN.raw"); //Cleanmode
+  myFiles.load(20, 524, 74, 74, "74OFF.raw");
+  myFiles.load(20, 608, 74, 74, "74Reset.raw");
+  myFiles.load(250, 524, 74, 74, "74CleanN.raw"); //Cleanmode
 }
 
 
@@ -665,30 +665,30 @@ void SettingsScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(255, 36, 0);
   myGLCD.print("SETTINGS      ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Sett.raw");
+  myFiles.load(6, 24, 60, 60, "60Sett.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
 
   //end of >TOP
-    myFiles.load(PowerSchedCord[0], PowerSchedCord[1], 74, 74, "74Powe.raw");
-    myFiles.load(LightsCord[0], LightsCord[1], 74, 74, "74Ligh.raw");
-    myFiles.load(CleanCord[0], CleanCord[1], 74, 74, "74CleanN.raw");
-    myFiles.load(ScheCord[0], ScheCord[1], 74, 74, "74Sche.raw");
-    myFiles.load(ClockCord[0], ClockCord[1], 74, 74, "74Cloc.raw");
-    myFiles.load(Co2SetCord[0], Co2SetCord[1], 74, 74, "74Co2_N.raw");
-    myFiles.load(HeatCord[0], HeatCord[1], 74, 74, "74Heat.raw");
-    myFiles.load(DoseCord[0], DoseCord[1], 74, 74, "74Dose.raw");
-    myFiles.load(ScreenCord[0], ScreenCord[1], 74, 74, "74Scree.raw");
-    myFiles.load(RGBCord[0], RGBCord[1], 74, 74, "74RGB.raw");
-    myFiles.load(TVModeCord[0], TVModeCord[1], 74, 74, "74TV.raw");
-    myFiles.load(MoonModeCord[0], MoonModeCord[1], 74, 74, "74Moon.raw");
+  myFiles.load(PowerSchedCord[0], PowerSchedCord[1], 74, 74, "74Powe.raw");
+  myFiles.load(LightsCord[0], LightsCord[1], 74, 74, "74Ligh.raw");
+  myFiles.load(CleanCord[0], CleanCord[1], 74, 74, "74CleanN.raw");
+  myFiles.load(ScheCord[0], ScheCord[1], 74, 74, "74Sche.raw");
+  myFiles.load(ClockCord[0], ClockCord[1], 74, 74, "74Cloc.raw");
+  myFiles.load(Co2SetCord[0], Co2SetCord[1], 74, 74, "74Co2_N.raw");
+  myFiles.load(HeatCord[0], HeatCord[1], 74, 74, "74Heat.raw");
+  myFiles.load(DoseCord[0], DoseCord[1], 74, 74, "74Dose.raw");
+  myFiles.load(ScreenCord[0], ScreenCord[1], 74, 74, "74Scree.raw");
+  myFiles.load(RGBCord[0], RGBCord[1], 74, 74, "74RGB.raw");
+  myFiles.load(TVModeCord[0], TVModeCord[1], 74, 74, "74TV.raw");
+  myFiles.load(MoonModeCord[0], MoonModeCord[1], 74, 74, "74Moon.raw");
 
 
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -701,7 +701,7 @@ void LightsScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(182, 0, 255);
   myGLCD.print("LIGHTS            ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Ligh.raw");
+  myFiles.load(6, 24, 60, 60, "60Ligh.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -815,22 +815,22 @@ void LightsScreen()
    myGLCD.print("  0%" , 400,620);
    */
   /*
-    myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw");
-    myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw");
-    myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw");
-    myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw");
+  myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw");
+  myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw");
+  myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw");
+  myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw");
 
-    myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Remi.raw");
-    myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw");
-    myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw");
-    myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw");
+  myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Remi.raw");
+  myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw");
+  myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw");
+  myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw");
 
   */
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -842,7 +842,7 @@ void LightScene()
   myGLCD.setColor(182, 0, 255);
   myGLCD.print("LIGHT SCENE", 77, 40);
   myGLCD.printNumI(dispScreen - 40, 360, 40);
-    myFiles.load(6, 24, 60, 60, "60Ligh.raw");
+  myFiles.load(6, 24, 60, 60, "60Ligh.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -853,33 +853,33 @@ void LightScene()
   myGLCD.print("SCENE OFF", 20, 400);
   myGLCD.print("BRIGHTNESS", 20, 530);
 
-    myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
 
 
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
 
 
-    myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
 
-    myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
 
 
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
   UpdateLightScene();
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -911,7 +911,7 @@ void RGBScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(0, 255, 132);
   myGLCD.print("RGB            ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60RGB.raw");
+  myFiles.load(6, 24, 60, 60, "60RGB.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1116,22 +1116,22 @@ void RGBScreen()
      myGLCD.print("  0%" , 400,620);
      */
   /*
-    myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw");
-    myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw");
-    myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw");
-    myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw");
+  myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw");
+  myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw");
+  myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw");
+  myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw");
 
-    myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Remi.raw");
-    myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw");
-    myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw");
-    myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw");
+  myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Remi.raw");
+  myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw");
+  myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw");
+  myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw");
 
   */
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1156,7 +1156,7 @@ void RGBScene()
   myGLCD.setColor(0, 255, 132);
   myGLCD.print("RGB SCENE", 77, 40);
   myGLCD.printNumI(dispScreen - 140, 360, 40);
-    myFiles.load(6, 24, 60, 60, "60Ligh.raw");
+  myFiles.load(6, 24, 60, 60, "60Ligh.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1167,36 +1167,36 @@ void RGBScene()
   myGLCD.print("SCENE OFF", 20, 400);
   myGLCD.print("RGB", 20, 530);
 
-    myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
 
 
-    myFiles.load(red1Up[0], red1Up[1], 48, 48, "48up.raw"); //red 1 up
-    myFiles.load(red1Down[0], red1Down[1], 48, 48, "48up.raw"); //red 1 down
-    myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw"); //green 1  up
-    myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw"); //green 1 down
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw"); //blue 1 up
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw"); //blue 1 down
+  myFiles.load(red1Up[0], red1Up[1], 48, 48, "48up.raw"); //red 1 up
+  myFiles.load(red1Down[0], red1Down[1], 48, 48, "48up.raw"); //red 1 down
+  myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw"); //green 1  up
+  myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw"); //green 1 down
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw"); //blue 1 up
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw"); //blue 1 down
 
 
-    myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
 
 
-    myFiles.load(red2Up[0], red2Up[1], 48, 48, "48up.raw"); //red 2 up
-    myFiles.load(red2Down[0], red2Down[1], 48, 48, "48up.raw"); //red 2 down
-    myFiles.load(powCo2OffHourUp[0], powCo2OffHourUp[1], 48, 48, "48up.raw"); //green 2  up
-    myFiles.load(powCo2OffHourDown[0], powCo2OffHourDown[1], 48, 48, "48down.raw"); //green 2 down
-    myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw"); //blue 2 up
-    myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw"); //blue 2 down
+  myFiles.load(red2Up[0], red2Up[1], 48, 48, "48up.raw"); //red 2 up
+  myFiles.load(red2Down[0], red2Down[1], 48, 48, "48up.raw"); //red 2 down
+  myFiles.load(powCo2OffHourUp[0], powCo2OffHourUp[1], 48, 48, "48up.raw"); //green 2  up
+  myFiles.load(powCo2OffHourDown[0], powCo2OffHourDown[1], 48, 48, "48down.raw"); //green 2 down
+  myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw"); //blue 2 up
+  myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw"); //blue 2 down
 
 
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
   UpdateRGBSceneTOP();
   UpdateRGBSceneBOT();
@@ -1204,7 +1204,7 @@ void RGBScene()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1218,7 +1218,7 @@ void MoonScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(135, 171, 255);
   myGLCD.print("MOONLIGHT MODE", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Moon.raw");
+  myFiles.load(6, 24, 60, 60, "60Moon.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1228,22 +1228,22 @@ void MoonScreen()
   myGLCD.print("RGB", 20, 230);
 
 
-    myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
 
 
-    myFiles.load(red1Up[0], red1Up[1], 48, 48, "48up.raw"); //red 1 up
-    myFiles.load(red1Down[0], red1Down[1], 48, 48, "48up.raw"); //red 1 down
-    myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw"); //green 1  up
-    myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw"); //green 1 down
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw"); //blue 1 up
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw"); //blue 1 down
+  myFiles.load(red1Up[0], red1Up[1], 48, 48, "48up.raw"); //red 1 up
+  myFiles.load(red1Down[0], red1Down[1], 48, 48, "48up.raw"); //red 1 down
+  myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw"); //green 1  up
+  myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw"); //green 1 down
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw"); //blue 1 up
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw"); //blue 1 down
 
 
 
 
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
  UpdateMoonScreen();
 
@@ -1251,7 +1251,7 @@ void MoonScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1291,7 +1291,7 @@ void TVScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(0, 97, 23);
   myGLCD.print("TV MODE", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60TV.raw");
+  myFiles.load(6, 24, 60, 60, "60TV.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1300,13 +1300,13 @@ void TVScreen()
 
 
 
-    myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
 
 
 
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
  UpdateTVScreen();
 
@@ -1314,7 +1314,7 @@ void TVScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1392,7 +1392,7 @@ void ClockScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(0, 109, 255);
   myGLCD.print("CLOCK        ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Cloc.raw");
+  myFiles.load(6, 24, 60, 60, "60Cloc.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   updateClockSettings();
@@ -1401,18 +1401,18 @@ void ClockScreen()
 
 
 
-    myFiles.load(HourUp[0], HourUp[1], 48, 48, "48up.raw");
-    myFiles.load(HourDown[0], HourDown[1], 48, 48, "48down.raw");
-    myFiles.load(MinuteUp[0], MinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(MinuteDown[0], MinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(HourUp[0], HourUp[1], 48, 48, "48up.raw");
+  myFiles.load(HourDown[0], HourDown[1], 48, 48, "48down.raw");
+  myFiles.load(MinuteUp[0], MinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(MinuteDown[0], MinuteDown[1], 48, 48, "48down.raw");
 
-    myFiles.load(DayUp[0], DayUp[1], 48, 48, "48up.raw");
-    myFiles.load(DayDown[0], DayDown[1], 48, 48, "48down.raw");
-    myFiles.load(MonthUp[0], MonthUp[1], 48, 48, "48up.raw");
-    myFiles.load(MonthDown[0], MonthDown[1], 48, 48, "48down.raw");
-    myFiles.load(YearUp[0], YearUp[1], 48, 48, "48up.raw");
-    myFiles.load(YearDown[0], YearDown[1], 48, 48, "48down.raw");
-    myFiles.load(SetClockCord[0], SetClockCord[1], 168, 52, "6set.raw");
+  myFiles.load(DayUp[0], DayUp[1], 48, 48, "48up.raw");
+  myFiles.load(DayDown[0], DayDown[1], 48, 48, "48down.raw");
+  myFiles.load(MonthUp[0], MonthUp[1], 48, 48, "48up.raw");
+  myFiles.load(MonthDown[0], MonthDown[1], 48, 48, "48down.raw");
+  myFiles.load(YearUp[0], YearUp[1], 48, 48, "48up.raw");
+  myFiles.load(YearDown[0], YearDown[1], 48, 48, "48down.raw");
+  myFiles.load(SetClockCord[0], SetClockCord[1], 168, 52, "6set.raw");
 
 
 
@@ -1421,7 +1421,7 @@ void ClockScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 
 
@@ -1449,7 +1449,7 @@ void CleanSchedScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(0, 219, 0);
   myGLCD.print("CLEANING   ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60CleanN.raw");
+  myFiles.load(6, 24, 60, 60, "60CleanN.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1465,10 +1465,10 @@ void CleanSchedScreen()
   myGLCD.print("Heater", 334, 348);
   myGLCD.print("Cooling", 110, 432);
 
-    myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
   myGLCD.setFont(UbuntuBold);
   myGLCD.print("Minutes", 70, 575);
   /*
@@ -1477,7 +1477,7 @@ void CleanSchedScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 
 }
@@ -1485,47 +1485,47 @@ void CleanSchedScreen()
 void updateCleanSchedScreen()
 { wdt_reset();
   if (!pump1Clean) {
-      myFiles.load(20, 150, 74, 74, "74Filt_N.raw");
+    myFiles.load(20, 150, 74, 74, "74Filt_N.raw");
   }
   else {
-      myFiles.load(20, 150, 74, 74, "74Filt_F.raw");
+    myFiles.load(20, 150, 74, 74, "74Filt_F.raw");
   }
   if (!pump2Clean)  {
-      myFiles.load(250, 150, 74, 74, "74Filt_N.raw");
+    myFiles.load(250, 150, 74, 74, "74Filt_N.raw");
   }
   else   {
-      myFiles.load(250, 150, 74, 74, "74Filt_F.raw");
+    myFiles.load(250, 150, 74, 74, "74Filt_F.raw");
   }
   if (!light230Clean) {
-      myFiles.load(20, 234, 74, 74, "74LED_N.raw");
+    myFiles.load(20, 234, 74, 74, "74LED_N.raw");
   }
   else {
-      myFiles.load(20, 234, 74, 74, "74LED_F.raw");
+    myFiles.load(20, 234, 74, 74, "74LED_F.raw");
   }
   wdt_reset();
   if (!light2Clean) {
-      myFiles.load(250, 234, 74, 74, "74LED_N.raw");
+    myFiles.load(250, 234, 74, 74, "74LED_N.raw");
   }
   else {
-      myFiles.load(250, 234, 74, 74, "74LED_F.raw");
+    myFiles.load(250, 234, 74, 74, "74LED_F.raw");
   }
   if (!co2Clean) {
-      myFiles.load(20, 318, 74, 74, "74CO2_N.raw");
+    myFiles.load(20, 318, 74, 74, "74CO2_N.raw");
   }
   else  {
-      myFiles.load(20, 318, 74, 74, "74CO2_F.raw");
+    myFiles.load(20, 318, 74, 74, "74CO2_F.raw");
   }
   if (!heaterClean ) {
-      myFiles.load(250, 318, 74, 74, "74heat_N.raw");
+    myFiles.load(250, 318, 74, 74, "74heat_N.raw");
   }
   else {
-      myFiles.load(250, 318, 74, 74, "74heat_F.raw");
+    myFiles.load(250, 318, 74, 74, "74heat_F.raw");
   }
   if (!coolClean)  {
-      myFiles.load(20, 402, 74, 74, "74Fan_N.raw");
+    myFiles.load(20, 402, 74, 74, "74Fan_N.raw");
   }
   else {
-      myFiles.load(20, 402, 74, 74, "74Fan_F.raw");
+    myFiles.load(20, 402, 74, 74, "74Fan_F.raw");
   }
 
 }
@@ -1545,7 +1545,7 @@ void RemindScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(219, 0, 170);
   myGLCD.print("REMINDER            ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Sche.raw");
+  myFiles.load(6, 24, 60, 60, "60Sche.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1574,12 +1574,12 @@ void RemindScreen()
   myGLCD.print(")", 248, 442);
 
 
-    myFiles.load(20, 150, 74, 74, "74Clea.raw");
-    myFiles.load(20, 234, 74, 74, "74CO2_N.raw");
-    myFiles.load(20, 318, 74, 74, "74Filt_N.raw");
-    myFiles.load(20, 402, 74, 74, "74Filt_N.raw");
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(20, 150, 74, 74, "74Clea.raw");
+  myFiles.load(20, 234, 74, 74, "74CO2_N.raw");
+  myFiles.load(20, 318, 74, 74, "74Filt_N.raw");
+  myFiles.load(20, 402, 74, 74, "74Filt_N.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
 
   updateRemindScreen();
@@ -1590,7 +1590,7 @@ void RemindScreen()
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1642,23 +1642,23 @@ void HeaterScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(219, 0, 85);
   myGLCD.print("HEATER              ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Heat.raw");
+  myFiles.load(6, 24, 60, 60, "60Heat.raw");
 
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
   myGLCD.print("UPPER LIMIT",  20, 215);
   myGLCD.print("LOWER LIMIT", 20, 385);
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1679,7 +1679,7 @@ void DoseScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(73, 36, 0);
   myGLCD.print("DOSING             ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Dose.raw");
+  myFiles.load(6, 24, 60, 60, "60Dose.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1735,18 +1735,18 @@ void DoseScreen()
 
   myGLCD.setFont(UbuntuBold);
   myGLCD.print("TIME", 10, 445);
-    myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(refillAllCord[0], refillAllCord[1], 260, 52, "260Ref.raw");
+  myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(refillAllCord[0], refillAllCord[1], 260, 52, "260Ref.raw");
 
 
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1761,7 +1761,7 @@ void updateDoseScreen()
 void DoseScreenN()
 { myGLCD.setFont(UbuntuBold);
 
-    myFiles.load(6, 24, 60, 60, "60Dose.raw");
+  myFiles.load(6, 24, 60, 60, "60Dose.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
@@ -1778,68 +1778,68 @@ void DoseScreenN()
 
   myGLCD.print("ml/min", 260, 445);
   //445
-    myFiles.load(calibrateCord[0], calibrateCord[1], 260, 52, "260Cal.raw");
-    myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(calibrateCord[0], calibrateCord[1], 260, 52, "260Cal.raw");
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
 
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
 
 
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 }
 
 void UpdateDoseScreenN(byte FS)
 { if (MoF[FS]) {
-      myFiles.load(MoCord[0], MoCord[1], 48, 48, "48chec.raw");
+    myFiles.load(MoCord[0], MoCord[1], 48, 48, "48chec.raw");
   }
   else {
-      myFiles.load(MoCord[0], MoCord[1], 48, 48, "48unch.raw");
+    myFiles.load(MoCord[0], MoCord[1], 48, 48, "48unch.raw");
   }
   if (TuF[FS]) {
-      myFiles.load(TuCord[0], TuCord[1], 48, 48, "48chec.raw");
+    myFiles.load(TuCord[0], TuCord[1], 48, 48, "48chec.raw");
   }
   else {
-      myFiles.load(TuCord[0], TuCord[1], 48, 48, "48unch.raw");
+    myFiles.load(TuCord[0], TuCord[1], 48, 48, "48unch.raw");
   }
   if (WeF[FS]) {
-      myFiles.load(WeCord[0], WeCord[1], 48, 48, "48chec.raw");
+    myFiles.load(WeCord[0], WeCord[1], 48, 48, "48chec.raw");
   }
   else {
-      myFiles.load(WeCord[0], WeCord[1], 48, 48, "48unch.raw");
+    myFiles.load(WeCord[0], WeCord[1], 48, 48, "48unch.raw");
   }
   if (ThF[FS]) {
-      myFiles.load(ThCord[0], ThCord[1], 48, 48, "48chec.raw");
+    myFiles.load(ThCord[0], ThCord[1], 48, 48, "48chec.raw");
   }
   else {
-      myFiles.load(ThCord[0], ThCord[1], 48, 48, "48unch.raw");
+    myFiles.load(ThCord[0], ThCord[1], 48, 48, "48unch.raw");
   }
   if (FrF[FS]) {
-      myFiles.load(FrCord[0], FrCord[1], 48, 48, "48chec.raw");
+    myFiles.load(FrCord[0], FrCord[1], 48, 48, "48chec.raw");
   }
   else {
-      myFiles.load(FrCord[0], FrCord[1], 48, 48, "48unch.raw");
+    myFiles.load(FrCord[0], FrCord[1], 48, 48, "48unch.raw");
   }
   if (SaF[FS]) {
-      myFiles.load(SaCord[0], SaCord[1], 48, 48, "48chec.raw");
+    myFiles.load(SaCord[0], SaCord[1], 48, 48, "48chec.raw");
   }
   else {
-      myFiles.load(SaCord[0], SaCord[1], 48, 48, "48unch.raw");
+    myFiles.load(SaCord[0], SaCord[1], 48, 48, "48unch.raw");
   }
   if (SuF[FS]) {
-      myFiles.load(SoCord[0], SoCord[1], 48, 48, "48chec.raw");
+    myFiles.load(SoCord[0], SoCord[1], 48, 48, "48chec.raw");
   }
   else {
-      myFiles.load(SoCord[0], SoCord[1], 48, 48, "48unch.raw");
+    myFiles.load(SoCord[0], SoCord[1], 48, 48, "48unch.raw");
   }
 }
 
@@ -1880,7 +1880,7 @@ void PowerSchedScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(219, 0, 0);
   myGLCD.print("POWER           ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Powe.raw");
+  myFiles.load(6, 24, 60, 60, "60Powe.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   UpdatePowerSchedScreen();
@@ -1891,35 +1891,35 @@ void PowerSchedScreen()
   myGLCD.print("LIGHTS OFF", 20, 230);
   myGLCD.print("CO2 ON", 20, 400);
   myGLCD.print("CO2 OFF", 20, 530);
-    myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OffHourUp[0], powCo2OffHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OffHourDown[0], powCo2OffHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnHourUp[0], powCo2OnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnHourDown[0], powCo2OnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OffHourUp[0], powCo2OffHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OffHourDown[0], powCo2OffHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
 
 
 
 
 
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -1951,7 +1951,7 @@ void ScreenScreen()
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 75, 450, 75);
   myGLCD.print("SCREEN         ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Scree.raw");
+  myFiles.load(6, 24, 60, 60, "60Scree.raw");
   myGLCD.setColor(255, 0, 0);
 
   //end of >TOP
@@ -1964,32 +1964,32 @@ void ScreenScreen()
   myGLCD.setFont(BigFont);
   myGLCD.print("to Standby", 200, 400);
   myGLCD.print("in Standby", 265, 520);
-    myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw");
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnHourUp[0], powLightOnHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnHourDown[0], powLightOnHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOnMinuteUp[0], powLightOnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOnMinuteDown[0], powLightOnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOffHourUp[0], powLightOffHourUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffHourDown[0], powLightOffHourDown[1], 48, 48, "48down.raw");
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OffMinuteUp[0], powCo2OffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OffMinuteDown[0], powCo2OffMinuteDown[1], 48, 48, "48down.raw");
 
 
 
 
 
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
 
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
   UpdateScreenScreen();
 
 }
@@ -2022,37 +2022,37 @@ void Co2SetScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(0, 182, 16);
   myGLCD.print("CO2 SETTINGS     ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "60Co2.raw");
+  myFiles.load(6, 24, 60, 60, "60Co2.raw");
 
   myGLCD.drawLine(66, 75, 450, 75);
   //end of >TOP
   /*
-    myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw");
-    myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw");
-    myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw");
-    myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw");
+  myFiles.load(ClockCord[0], ClockCord[1],74,74, "74Cloc.raw");
+  myFiles.load(LightsCord[0], LightsCord[1],74,74, "74Ligh.raw");
+  myFiles.load(CleanCord[0], CleanCord[1],74,74, "74Clea.raw");
+  myFiles.load(ScheCord[0], ScheCord[1],74,74, "74Sche.raw");
 
-    myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Remi.raw");
-    myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw");
-    myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw");
-    myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw");
+  myFiles.load(ScreenCord[0], ScreenCord[1],74,74, "74Remi.raw");
+  myFiles.load(HeatCord[0], HeatCord[1],74,74, "74Heat.raw");
+  myFiles.load(Co2SetCord[0], Co2SetCord[1],74,74, "74Co2_N.raw");
+  myFiles.load(DoseCord[0], DoseCord[1],74,74, "74Dose.raw");
 
   */
 
   myGLCD.print("UPPER LIMIT",  20, 215);
   myGLCD.print("LOWER LIMIT", 20, 385);
-    myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
-    myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
-    myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
-    myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
+  myFiles.load(powLightOffMinuteUp[0], powLightOffMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powLightOffMinuteDown[0], powLightOffMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(powCo2OnMinuteUp[0], powCo2OnMinuteUp[1], 48, 48, "48up.raw");
+  myFiles.load(powCo2OnMinuteDown[0], powCo2OnMinuteDown[1], 48, 48, "48down.raw");
+  myFiles.load(CancelPowerSchedCord[0], CancelPowerSchedCord[1], 168, 52, "6cancel.raw");
+  myFiles.load(SetPowerSchedCord[0], SetPowerSchedCord[1], 168, 52, "6set.raw");
 
   //footer starts here
   myGLCD.setColor(col_white.r, col_white.g, col_white.b);
   myGLCD.drawLine(30, 770, 196, 770);
   myGLCD.drawLine(284, 770, 450, 770);
-    myFiles.load(216, 746, 48, 48, "HomeBot.raw");
+  myFiles.load(216, 746, 48, 48, "HomeBot.raw");
 
 }
 
@@ -2075,11 +2075,11 @@ void TestScreen()
   myGLCD.setFont(UbuntuBold);
   myGLCD.setColor(0, 0, 255);
   myGLCD.print("HOME       ", 77, 40);
-    myFiles.load(6, 24, 60, 60, "1home.raw");
+  myFiles.load(6, 24, 60, 60, "1home.raw");
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawLine(66, 81, 450, 81);
   //end of >TOP
-    myFiles.load(0, 0, 480, 800, "256Col.raw");
+  myFiles.load(0, 0, 480, 800, "256Col.raw");
   /*draw Button 1
     myGLCD.setColor(0, 0, 255);
     myGLCD.fillRoundRect (Button1Cord[0], Button1Cord[1], Button1Cord[2], Button1Cord[3]);

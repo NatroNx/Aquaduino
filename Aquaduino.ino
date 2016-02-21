@@ -12,7 +12,7 @@
 // v.1.5.1 - 05.11.2015 - bugfixing
 // v.1.5.2 - 07.11.2015 - bugfixing | implementing TempCurve
 // v.1.5.3 - 21.11.2015 - implement MoonMode
-// v.1.7.5.1 - 17.02.2016
+
 
 
 //needed Libraries
@@ -30,14 +30,7 @@
 #include <tinyFAT.h> // used to acess the SD card
 #include <UTFT_SdRaw.h>  // used to read .raw images from the SD card
 #include <avr/wdt.h>
-#include <avr/pgmspace.h>
 
-
-
-
-#define debug 1
-
-#define progMemBuffer 128
 
 
 //bring it up - initialise
@@ -45,7 +38,7 @@ OneWire oneWire(ONE_WIRE_BUS);  // Setup a oneWire instance to communicate with 
 DallasTemperature sensors(&oneWire);  // Pass our oneWire reference to Dallas Temperature.
 UTFT myGLCD(ITDB50, 38, 39, 40, 41); //initialize TFT
 UTouch  myTouch( 6, 5, 4, 3, 2); //initialize TFT
-  UTFT_SdRaw myFiles(&myGLCD);
+UTFT_SdRaw myFiles(&myGLCD);
 RCSwitch mySwitch = RCSwitch();
 
 
@@ -59,59 +52,6 @@ extern uint8_t OCR_A_Extended_M[];
     alle globale Variablen - teilweise mit Startweten definiert
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-
-
-
-
-enum {tPhWert, tTemp, tcalculatedPWM, tcalculatedRed, tcalculatedGreen, tcalculatedBlue, tTVModeState, tcleaningInProcess,
-      tmanualOverride, tMoonModeState, tpump1Value, tpump2Value, tlight230Value, tlight1Value,
-      tlight2Value, tco2Value, theaterValue, tdPump1Value, tdPump2Value, tdPump3Value, tcoolValue, tnow, tprocess
-     };
-
-const char PhWert_Char[] PROGMEM    = "PhWert";
-const char Temp_Char[] PROGMEM    = "Temp";
-const char calculatedPWM_Char[] PROGMEM    = "calculatedPWM";
-const char calculatedRed_Char[] PROGMEM    = "calculatedRed";
-const char calculatedGreen_Char[] PROGMEM    = "calculatedGreen";
-const char calculatedBlue_Char[] PROGMEM    = "calculatedBlue";
-const char TVModeState_Char[] PROGMEM    = "TVModeState";
-const char cleaningInProcess_Char[] PROGMEM    = "cleaningInProcess";
-const char manualOverride_Char[] PROGMEM    = "manualOverride";
-const char MoonModeState_Char[] PROGMEM    = "MoonModeState";
-const char pump1Value_Char[] PROGMEM    = "pump1Value";
-const char pump2Value_Char[] PROGMEM    = "pump2Value";
-const char light230Value_Char[] PROGMEM    = "light230Value";
-const char light1Value_Char[] PROGMEM    = "light1Value";
-const char light2Value_Char[] PROGMEM    = "light2Value";
-const char co2Value_Char[] PROGMEM    = "co2Value";
-const char heaterValue_Char[] PROGMEM    = "heaterValue";
-const char dPump1Value_Char[] PROGMEM    = "dPump1Value";
-const char dPump2Value_Char[] PROGMEM    = "dPump2Value";
-const char dPump3Value_Char[] PROGMEM    = "dPump3Value";
-const char coolValue_Char[] PROGMEM    = "coolValue";
-const char now_Char[] PROGMEM    = "now";
-const char process_Char[] PROGMEM    = "process";
-
-PGM_P const Char_table[] PROGMEM  =
-{ PhWert_Char, Temp_Char, calculatedPWM_Char, calculatedRed_Char, calculatedGreen_Char, calculatedBlue_Char, TVModeState_Char,
-  cleaningInProcess_Char, manualOverride_Char, MoonModeState_Char, pump1Value_Char, pump2Value_Char,
-  light230Value_Char, light1Value_Char, light2Value_Char, co2Value_Char, heaterValue_Char,
-  dPump1Value_Char, dPump2Value_Char, dPump3Value_Char, coolValue_Char, now_Char, process_Char
-};
-
-int charCount = sizeof(Char_table) / sizeof(Char_table[0]);
-
-
-
-String StringFromSerial;
-
-
-
-
-
-
-
 
 
 unsigned long currentMillis; // get current millis
@@ -523,8 +463,8 @@ const short red2Up[] = {138, 540 , 186  , 588};
 const short red2Down[] = {138, 593 , 186, 641};
 
 
-   SdFat SD;
-  File Aquaduino;
+SdFat SD;
+File Aquaduino;
 
 
 /*EEPROM ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -714,11 +654,11 @@ MoonRed = EEPROM.read(172);
 
 void setup() {
   wdt_enable(WDTO_8S);  //enable watchdog - reload after 8 seconds
-    file.setSSpin(53);
-    file.initFAT(SPISPEED_VERYHIGH);
+  file.setSSpin(53);
+  file.initFAT(SPISPEED_VERYHIGH);
   // thsoot Aquaduino
   pinMode(53, OUTPUT);
-     SD.begin(53);
+  SD.begin(53);
   pinMode(44, OUTPUT);
   analogWrite(backlightPIN, 255);
   //reset Co2Values
@@ -737,20 +677,14 @@ void setup() {
   }
 
 
-  Serial.begin(115200);
-  Serial2.begin(115200);
-#if debug
-  {
-    printMyValues();
-    Serial.println(F("REBOOT FINISHED"));
-  }
-#endif
 
 
 
 
 
-  //ph Stuff                                                      //set baud rate for the hardware serial port_0 to 38400
+
+  //ph Stuff
+  Serial.begin(38400);                                                      //set baud rate for the hardware serial port_0 to 38400
   Serial3.begin(38400);                                                     //set baud rate for software serial port_3 to 38400
   inputstring.reserve(5);                                                   //set aside some bytes for receiving data from the PC
   PhWertString.reserve(30);     //set aside some bytes for receiving data from Atlas Scientific product
@@ -781,8 +715,6 @@ void setup() {
   sx1509.pinDir(heaterPin, OUTPUT);  //
     sx1509.pinDir(coolPin, OUTPUT);  //
   */
-  sx1509.pinDir(light2Pin, OUTPUT);  //
-  sx1509.pinDir(light1Pin, OUTPUT);  //
   sx1509.pinDir(dPump1Pin, OUTPUT);  //
   sx1509.pinDir(dPump2Pin, OUTPUT);  //
   sx1509.pinDir(dPump3Pin, OUTPUT);  //
@@ -817,7 +749,7 @@ void setup() {
   analogWrite(greenPin, 0);
   analogWrite(bluePin, 0);
 
- Aquaduino = SD.open("aqua.txt", FILE_WRITE);
+  Aquaduino = SD.open("aqua.txt", FILE_WRITE);
   if (Aquaduino)
   { Aquaduino.println("Initialisation complete - Aquaduino up and running");
     Aquaduino.println("Date;Time;Temperature;PH;PWM;pump2Value;light230Value;light1Value=true;light2Value;co2Value;heaterValue;dPump1Value;dPump2Value;dPump3Value;coolValue;");
@@ -2563,43 +2495,16 @@ void loop() {
 
     }
   }
- /*sendCommand("Temp",String(Temp)); 
- sendCommand("PhWert",String(PhWert));
-  sendCommand("heaterValue",String(heaterValue));
-  */
-   if (Serial2.available())
-  {
-    char charFromSerial = Serial2.read();
-    if (charFromSerial == '\n')
-    { parseCommand(StringFromSerial);
-      StringFromSerial = "";
-    }
-    else
-    {
-      StringFromSerial += charFromSerial;
-    }
-  }
+
+
   if (!myTouch.dataAvailable())
-  {    if (Serial2.available())
-  {
-    char charFromSerial = Serial2.read();
-    if (charFromSerial == '\n')
-    { parseCommand(StringFromSerial);
-      StringFromSerial = "";
-    }
-    else
-    {
-      StringFromSerial += charFromSerial;
-    }
-  }
-  
-    getPHValue();
+  { getPHValue();
     if (currentMillis - prevMillis5sec > 5000)  //if 5 seconds are over update our data
     { prevMillis5sec = millis();
       GetTemperature();
       lightCalculator();
       UpdateClockAndLight();
-      giveAllData();
+
    
 
 

@@ -552,8 +552,8 @@ void AI()
 
 
 void writeFile()
-{    Aquaduino = SD.open("aqua.txt", FILE_WRITE);
-  /*    if (Aquaduino)
+{ Aquaduino = SD.open("aqua.txt", FILE_WRITE);
+  if (Aquaduino)
   { Aquaduino.print(now.day(), DEC);
     Aquaduino.print(".");
     Aquaduino.print(now.month(), DEC);
@@ -596,7 +596,7 @@ void writeFile()
     Aquaduino.println(";");
     //Aquaduino.println();
     Aquaduino.close();
-  }*/
+  }
 }
 /*
 void writeFertToCard()
@@ -648,8 +648,8 @@ void fertilize()
 
       //fertilize N
       if (dayN[now.dayOfWeek()]  && (FLeft[0] - FDose[0] >= 0))
-      {   Aquaduino.print("N:");
-          Aquaduino.print(FDose[0]);
+      { Aquaduino.print("N:");
+        Aquaduino.print(FDose[0]);
         FLeft[0] = FLeft[0] - FDose[0];
         fertmillis = millis();
 
@@ -659,7 +659,7 @@ void fertilize()
         { dPump1Value = false;
           processRelais();
           if (dispScreen < 1) {
-              myFiles.load(393, 449, 48, 48, "1nN.raw");
+            myFiles.load(393, 449, 48, 48, "1nN.raw");
           }
         }
         dPump1Value = true;
@@ -670,8 +670,8 @@ void fertilize()
       }
       //fertilize NPK
       if (dayNPK[now.dayOfWeek()] && (FLeft[1] - FDose[1] >= 0))
-      {   Aquaduino.print("  NPK: ");
-          Aquaduino.print(FDose[1]);
+      { Aquaduino.print("  NPK: ");
+        Aquaduino.print(FDose[1]);
         FLeft[1] = FLeft[1] - FDose[1];
         fertmillis = millis();
         wdt_disable();
@@ -679,7 +679,7 @@ void fertilize()
         { dPump2Value = false;
           processRelais();
           if (dispScreen < 1) {
-              myFiles.load(340, 502, 48, 48, "1npkN.raw");
+            myFiles.load(340, 502, 48, 48, "1npkN.raw");
           }
         }
         dPump2Value = true;
@@ -689,8 +689,8 @@ void fertilize()
       }
       //fertilize FE
       if (dayFE[now.dayOfWeek()] && (FLeft[2] - FDose[2] >= 0))
-      {   Aquaduino.print("  FE: ");
-         Aquaduino.print(FDose[2]);
+      { Aquaduino.print("  FE: ");
+        Aquaduino.print(FDose[2]);
         FLeft[2] = FLeft[2] - FDose[2];
         fertmillis = millis();
         wdt_disable();
@@ -698,7 +698,7 @@ void fertilize()
         { dPump3Value = false;
           processRelais();
           if (dispScreen < 1) {
-              myFiles.load(393, 502, 48, 48, "1feN.raw");
+            myFiles.load(393, 502, 48, 48, "1feN.raw");
           }
         }
         dPump3Value = true;
@@ -707,8 +707,8 @@ void fertilize()
         updateHomeScreen();
 
       }
-       Aquaduino.println();
-       Aquaduino.close();
+      Aquaduino.println();
+      Aquaduino.close();
       drawFertilizer();
       saveFerti();
 
@@ -1226,252 +1226,5 @@ void saveScreenScreen()
   EEPROM.write(110, standByMinutes);
   EEPROM.write(111, backlightPWM);
 }
-
-
-
-
-
-
-
-void parseCommand(String com)
-{
-  String part1;
-  // part1 = com.substring(0, com.indexOf("|"));
-  if (com.substring(0, com.indexOf("|")).equalsIgnoreCase("toMega"))
-  {
-    for (int i = com.indexOf("|"); i < com.lastIndexOf("|"); i = com.indexOf("|", i + 1))
-    { String part1 = com.substring(i + 1, com.indexOf("|", i + 1));
-      int cmdID = findCommand(part1.substring(0, part1.indexOf("_")).c_str());
-      switch (cmdID)
-      { //case tPhWert : {PhWert=(part1.substring(part1.indexOf("_")+1,part1.length())).toFloat();  break;}
-        //case tTemp : {Temp=(part1.substring(part1.indexOf("_")+1,part1.length())).toFloat();    break;}
-        case tcalculatedPWM : {calculatedPWM = (part1.substring(part1.indexOf("_") + 1, part1.length())).toFloat();   sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedPWM));break;}
-        case tcalculatedRed : {calculatedRed = (part1.substring(part1.indexOf("_") + 1, part1.length())).toFloat(); sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedRed)); break;}
-        case tcalculatedGreen : { calculatedGreen = (part1.substring(part1.indexOf("_") + 1, part1.length())).toFloat(); sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedGreen)); break;}
-        case tcalculatedBlue : { calculatedBlue = (part1.substring(part1.indexOf("_") + 1, part1.length())).toFloat();sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedBlue)); break;}
-        case tTVModeState : { TVModeState = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt(); sendCommand(part1.substring(0, part1.indexOf("_")), String(TVModeState)); break;}
-        case tcleaningInProcess : {cleaningInProcess = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt(); sendCommand(part1.substring(0, part1.indexOf("_")), String(cleaningInProcess)); break;}
-        case tmanualOverride : {manualOverride = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(manualOverride));break;}
-        case tMoonModeState : {MoonModeState = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(MoonModeState));break;}
-        case tpump1Value : {pump1Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(pump1Value));break;}
-        case tpump2Value : {pump2Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(pump2Value));break;}
-        case tlight230Value : {light230Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(light230Value));break;}
-        case tlight1Value : {light1Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(light1Value));break;}
-        case tlight2Value : {light2Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(light2Value));break;}
-        case tco2Value : {co2Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(co2Value));break;}
-        case theaterValue : {heaterValue = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(heaterValue));break;}
-        case tdPump1Value : {dPump1Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(dPump1Value));break;}
-        case tdPump2Value : {dPump2Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(dPump2Value));break;}
-        case tdPump3Value : {dPump3Value = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(dPump3Value));break;}
-        case tcoolValue : {coolValue = (part1.substring(part1.indexOf("_") + 1, part1.length())).toInt();sendCommand(part1.substring(0, part1.indexOf("_")), String(coolValue));break;}
-        //case tnow : {rtc.adjust(part1.substring(part1.indexOf("_") + 1, part1.length()).toInt());sendCommand(part1.substring(0, part1.indexOf("_")), String(now.unixtime()));break;}
-        case tprocess : {processRelais(); AI(); break;}
-     
-      }
-#if debug
-      {
-        printMyValues();
-      }
-#endif
-    }
-  }
-  else  if (com.substring(0, com.indexOf("|")).equalsIgnoreCase("toESP"))
-  {
-    for (int i = com.indexOf("|"); i < com.lastIndexOf("|"); i = com.indexOf("|", i + 1))
-    { String part1 = com.substring(i + 1, com.indexOf("|", i + 1));
-      int cmdID = findCommand(part1.substring(0, part1.indexOf("_")).c_str());
-      switch (cmdID)
-      { case tPhWert : {sendCommand(part1.substring(0, part1.indexOf("_")), String(PhWert));break;}
-        case tTemp : {sendCommand(part1.substring(0, part1.indexOf("_")), String(Temp));break;}
-        case tcalculatedPWM : {sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedPWM));break;}
-        case tcalculatedRed : {sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedRed));break;}
-        case tcalculatedGreen : {sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedGreen));break;}
-        case tcalculatedBlue : {sendCommand(part1.substring(0, part1.indexOf("_")), String(calculatedBlue));break;}
-        case tTVModeState : {sendCommand(part1.substring(0, part1.indexOf("_")), String(TVModeState));break;}
-        case tcleaningInProcess : {sendCommand(part1.substring(0, part1.indexOf("_")), String(cleaningInProcess));break;}
-        case tmanualOverride : {sendCommand(part1.substring(0, part1.indexOf("_")), String(manualOverride));break;}
-        case tMoonModeState : {sendCommand(part1.substring(0, part1.indexOf("_")), String(MoonModeState));break;}
-        case tpump1Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(pump1Value));break;}
-        case tpump2Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(pump2Value));break;}
-        case tlight230Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(light230Value));break;}
-        case tlight1Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(light1Value));break;}
-        case tlight2Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(light2Value));break;}
-        case tco2Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(co2Value));break;}
-        case theaterValue : {sendCommand(part1.substring(0, part1.indexOf("_")), String(heaterValue));break;}
-        case tdPump1Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(dPump1Value));break;}
-        case tdPump2Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(dPump2Value));break;}
-        case tdPump3Value : {sendCommand(part1.substring(0, part1.indexOf("_")), String(dPump3Value));break;}
-        case tcoolValue : {sendCommand(part1.substring(0, part1.indexOf("_")), String(coolValue));break;}
-          //case tnow : {sendCommand(part1.substring(0, part1.indexOf("_")), String(now)); break;}
-
-      }
-    }
-  }
-
-  else
-  {
-#if debug
-    { Serial.println(F("-- No known Command -- "));
-      Serial.println(com);
-      Serial.println(F("-- No known Command -- "));
-
-    }
-#endif
-  }
-
-}
-
-
-
-
-void giveAllData()
-{
-  sendSerial( "toESP|PhWert_" + String(PhWert) + "|" + "Temp_" + String(Temp) + "|" + "calculatedPWM_" + String(calculatedPWM) + "|" + "calculatedRed_" + String(calculatedRed) + "|" +
- "calculatedGreen_" + String(calculatedGreen) + "|" + "calculatedBlue_" + String(calculatedBlue) + "|" + "TVModeState_" + String(TVModeState) + "|" +
- "cleaningInProcess_" + String(cleaningInProcess) + "|" + "manualOverride_" + String(manualOverride) + "|" + "MoonModeState_" + String(MoonModeState) + "|" +
- "pump1Value_" + String(pump1Value) + "| \n");
-
-  delay(20);
-    sendSerial( "toESP|pump2Value_" + String(pump2Value) + "|" + "light230Value_" + String(light230Value) + "|" +
- "light1Value_" + String(light1Value) + "|" + "light2Value_" + String(light2Value) + "|" + "co2Value_" + String(co2Value) + "|" +
- "heaterValue_" + String(heaterValue) + "|" + "dPump1Value_" + String(dPump1Value) + "|" + "dPump2Value_" + String(dPump2Value) + "|" +
- "dPump3Value_" + String(dPump3Value) + "|" + "coolValue_" + String(coolValue) + "| \n");
-
-
-
- 
-}
-
-
-
-
-void sendSerial(String sendCom)
-{
- String sendThis = sendCom + "| \n" ;
-  char charBuf[350];
-  sendThis.toCharArray(charBuf, 350);
-  Serial2.write(charBuf);
-# if debug
-  {
-    Serial.print(charBuf);
-  }
-#endif
-}
-
-
-
-void sendCommand(String variable, String sendCom)
-{
-  String sendThis = "toESP|" + variable + "_" + sendCom + "| \n" ;
-  char charBuf[350];
-  sendThis.toCharArray(charBuf, 350);
-  Serial2.write(charBuf);
-# if debug
-  {
-    Serial.print(charBuf);
-  }
-#endif
-}
-
-
-
-
-
-int findCommand(const char* searchText)
-{
-  int startCount = 0;
-  int foundIndex = -1; // -1 = not found
-  while (startCount < charCount)
-  {
-    if (strcmp_P(searchText, (const char*)pgm_read_ptr(Char_table + startCount)) == 0)
-    {
-      foundIndex = startCount;
-      break;
-    }
-    startCount++;
-  }
-  return foundIndex;
-}
-
-
-
-
-
-
-
-
-void printMyValues()
-{
-#if debug
-{
-  Serial.println(F("-----Date and Time--------"));
-  Serial.println(F("NOW: "));
-  Serial.print(now.hour(), DEC);
-  Serial.print(':');
-  Serial.print(now.minute(), DEC);
-  Serial.print(':');
-  Serial.print(now.second(), DEC);
-  Serial.print(' ');
-  Serial.print(now.day(), DEC);
-  Serial.print('.');
-  Serial.print(now.month(), DEC);
-  Serial.print('.');
-  Serial.println(now.year(), DEC);
-  Serial.println(F("------PH and Temp--------"));
-  Serial.println(F("PhWert: "));
-  Serial.println(PhWert);
-  Serial.println(F("Temp: "));
-  Serial.println(Temp);
-  Serial.println(F("-----------Modes---------"));
-  Serial.print(F("TVModeState: "));
-  Serial.println(TVModeState);
-  Serial.print(F("cleaningInProcess: "));
-  Serial.println(cleaningInProcess);
-  Serial.print(F("manualOverride: "));
-  Serial.println(manualOverride);
-  Serial.print(F("MoonModeState: "));
-  Serial.println(MoonModeState);
-  Serial.println(F("--------Lights----------"));
-  Serial.print(F("calculatedPWM: "));
-  Serial.println(calculatedPWM);
-  Serial.print(F("calculatedRed: "));
-  Serial.println(calculatedRed);
-  Serial.print(F("calculatedGreen: "));
-  Serial.println(calculatedGreen);
-  Serial.print(F("calculatedBlue: "));
-  Serial.println(calculatedBlue);
-  Serial.println(F("-------Booleans--------"));
-  Serial.print(F("pump1Value: "));
-  Serial.println(pump1Value);
-  Serial.print(F("pump2Value: "));
-  Serial.println(pump2Value);
-  Serial.print(F("light230Value: "));
-  Serial.println(light230Value);
-  Serial.print(F("light1Value: "));
-  Serial.println(light1Value);
-  Serial.print(F("light2Value: "));
-  Serial.println(light2Value);
-  Serial.print(F("co2Value: "));
-  Serial.println(co2Value);
-  Serial.print(F("heaterValue: "));
-  Serial.println(heaterValue);
-  Serial.print(F("dPump1Value: "));
-  Serial.println(dPump1Value);
-  Serial.print(F("dPump2Value: "));
-  Serial.println(dPump2Value);
-  Serial.print(F("dPump3Value: "));
-  Serial.println(dPump3Value);
-  Serial.print(F("coolValue: "));
-  Serial.println(coolValue);
-  Serial.println(F("----------------------"));
-}
-#endif
-}
-
-
-
-
-
-
 
 
